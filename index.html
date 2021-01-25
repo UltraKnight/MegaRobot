@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-control" content="public">
+    <title>Mega Robot</title>
+    <link rel="stylesheet" href="./styles/styles.css">
+    <link rel="preload" href="./images/levels/level-1/level-1.png" as="image">
+    <link rel="preload" href="./images/player/run_8_567-556.png" as="image">
+    <link rel="preload" href="./images/player/idle_10_567-556.png" as="image">
+    <link rel="preload" href="./images/player/jump_10_567-556.png" as="image">
+    <link rel="preload" href="./images/player/shoot_4_567-556.png" as="image">
+    <link rel="preload" href="./images/player/slide_10_567-556.png" as="image">
+    <link rel="preload" href="./images/player/jumpmelee_8_567-556.png" as="image">
+    <link rel="preload" href="./images/player/jumpshoot_5_567-556.png" as="image">
+    <link rel="preload" href="./images/player/runshoot_9_567-556.png" as="image">
+    <link rel="preload" href="./images/player/melee_8_567-556.png" as="image">
+    <link rel="preload" href="./images/enemies/Robot01/walk/walk.png" as="image">
+    <link rel="preload" href="./images/enemies/Robot02/walk/walk.png" as="image">
+    <link rel="preload" href="./images/enemies/Robot03/walk/walk.png" as="image">
+</head>
+<body>
+    <div class='main'>
+        <h1>Controls</h1>
+        <div class='top'>
+            <p>A/D = MOVEMENT</p>
+            <p>S = DASH</p>
+            <P>K or W = JUMP</P>
+            <p>J = SHOOT</p>
+            <p>L = MELEE</p>
+        </div>
+        <div class='bottom'>
+            <button id="btn-play">PLAY</button>
+            <button id="btn-finish">END GAME</button>
+        </div>
+    </div>
+    <div id="div-canvas">
+        <canvas id="game-stage" width="1920" height="700"></canvas>
+    </div>
+
+    <script src="./javascript/Level.js"></script>
+    <script src="./javascript/Player.js"></script>
+    <script src="./javascript/Game.js"></script>
+    <script src="./javascript/ObjAnimation.js"></script>
+    <script src="./javascript/Controller.js"></script>
+    <script src="./javascript/Robot.js"></script>
+    <script src="./javascript/index.js"></script>
+</body>
+</html>
