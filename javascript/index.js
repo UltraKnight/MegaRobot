@@ -6,8 +6,9 @@ currentGame.player = new Player();
 let request;
 let gravity = 0.70;
 let gravitySpeed = 0;
+let levelLastSpeed = 0;
 
-function loop() {  
+function loop() {
     level.updateLevel();
 
     if(controller.k) {
@@ -23,9 +24,9 @@ function loop() {
         if (currentGame.player.onGround && currentGame.player.canSlide) {
             if (! (currentGame.player.jumping || currentGame.player.sliding)) {
                 if (currentGame.player.lookingRight) {
-                    currentGame.player.dashSpeed = 200;
+                    currentGame.player.dashSpeed = 304;
                 } else {
-                    currentGame.player.dashSpeed = -200;
+                    currentGame.player.dashSpeed = -304;
                 }
                 currentGame.player.sliding = true;
                 currentGame.player.canSlide = false;
@@ -82,6 +83,8 @@ function loop() {
     // }
 
     currentGame.player.move();
+    currentGame.showLife();
+    currentGame.player.updateSuperShot();
 
     if(currentGame.player.jumping) {
         currentGame.player.jump();
@@ -95,7 +98,7 @@ function loop() {
         currentGame.player.meleeAtk();
     } 
     
-    if(! currentGame.player.animating) {
+    if(currentGame.player.animating === false && currentGame.player.collidingTop === false) {
         currentGame.player.idle();
     }
 
@@ -104,9 +107,10 @@ function loop() {
     }
     
     if(currentGame.hasEnded) {
+        document.getElementById('btn-play-again').disabled = false;
         cancelAnimationFrame(request);
         currentGame.gameOver();
-        return ;
+        return;
     }
 
     if(controller.pause) {
@@ -120,5 +124,12 @@ window.onload = () => {
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     document.getElementById('btn-play').onclick = () => { currentGame.startGame(); };
+    document.getElementById('btn-play-again').onclick = () => { currentGame.startGame(); };
     document.getElementById('btn-finish').onclick = () => { currentGame.finishGame(); };
+
+    let reloading = sessionStorage.getItem("reloading");
+    if (reloading) {
+        sessionStorage.removeItem("reloading");
+        currentGame.startGame();
+    }
 };

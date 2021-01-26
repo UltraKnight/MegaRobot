@@ -1,7 +1,11 @@
 body {
     background-color: rgb(69, 69, 69);
+    background-image: url('../images/background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
 }
 
 .main {
@@ -23,14 +27,23 @@ h1 {
     align-items: center;
     justify-content: space-around;
     background: linear-gradient(to bottom, transparent, rgba(255, 165, 0, 0.6) 20%, rgba(255, 215, 0, 0.6) 80%, transparent);
-    width: 98vw;
+    width: 99vw;
+    margin: 0 auto;
 }
 
 .bottom {
     padding: 5px;
 }
 
-button {
+button:disabled {
+    border: 0;
+    padding: 10px;
+    font-weight: bold;
+    color: white;
+    background-color:rgb(69, 69, 69);
+}
+
+button:enabled {
     border: 0;
     padding: 10px;
     background: linear-gradient(to bottom, black, grey 80%, silver);
@@ -38,12 +51,29 @@ button {
     font-weight: bold;
 }
 
+button:enabled:hover {
+    color: black;
+    background: linear-gradient(to bottom, yellow, orange 30%, gold);
+}
+
 #div-canvas {
     display: block;
-    width: 98vw;
+    width: 99vw;
+    margin: 0 auto;
     text-align: center;
 }
 
 #game-stage {
-    width: 98%;
+    width: 99%;
+    margin: 0 auto;
+    display: none;
+}
+
+#main-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 50%;
 }

@@ -1,7 +1,7 @@
 class Player {
     constructor() {
-        this.x = 650;
-        this.y = 1;
+        this.x = 100;
+        this.y = 500;
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.width = 160;
@@ -9,6 +9,9 @@ class Player {
 
         this.health = 5;
         this.meleeRange = 50;
+        this.meleeDamage = 2;
+        this.bullets = [];
+        this.superShot = false;
 
         this.imgSource = './images/player/idle_10_567-556.png';
         this.jumping = false;
@@ -23,6 +26,9 @@ class Player {
         this.canSlide = true;
         this.canMelee = true;
         this.canMeleeDamage = true;
+        
+        this.newBulletTimer = 0;
+        this.superShotTimer = 1;
 
         this.inCollision = false;
         this.inCollisionWithEnemy = false;
@@ -47,15 +53,25 @@ class Player {
         this.slideAnimation = new ObjAnimation(8, './images/player/slide_10_567-556.png');
     }
 
+    //for collision test purpose
+    drawLines(item) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.moveTo(item.left(), item.top());
+        ctx.lineTo(item.right(), item.top());
+        ctx.lineTo(item.right(), item.bottom());
+        ctx.lineTo(item.left(), item.bottom());
+        ctx.lineTo(item.left(), item.top());
+        ctx.stroke();
+    }
+
     move() {
         let canMoveLeft = true;
         let canMoveRight = true;
-        
         //If is in the end of the level, then game over
-        if(this.x >= 8500) {
+        if(level.speedAcumulator >= 8500) {
             currentGame.hasEnded = true;
         }
-
         //normal collision
         for(let i = 0; i < level.enemies.length; i++) {
             this.collisionCheck(level.enemies[i]);
@@ -63,25 +79,24 @@ class Player {
             if(this.inCollision) {
                 if(this.inCollisionWithEnemy) {
                     this.inCollisionWithEnemy = false;
-                    this.receiveDmg();
-                    this.x -= 100;
+                    this.receiveDmg(1);
+                    if(this.x > 100) {
+                        this.x -= 100;
+                    }
                     break;
                 }
 
                 //this.inCollision = false;
-                if(this.collidingTop) {
-                    if (this.jumping) {
-                        this.jumping = false;
-                        this.melee = false;
-                        this.shoot = false;
-                        this.idle();
-                    }
-                    this.yVelocity = 0;
-                }
+                // if(this.collidingTop) {
+                //     if (this.jumping) {
+                //         this.jumping = false;
+                //         this.melee = false;
+                //         this.shoot = false;
+                //         this.idle();
+                //     }
+                //     this.yVelocity = 0;
+                // }
 
-                if(this.collidingBottom) {
-                    this.onPlatform = true;
-                } 
                 // else {
                 //     this.onPlatform = false;
                 //     if(this.y < level.groundY) {
@@ -89,12 +104,76 @@ class Player {
                 //     }
                 // }
 
-                if(this.collidingRight || this.collidingLeft) {
+                // if(this.collidingRight || this.collidingLeft) {
+                //     if(this.sliding) {
+                //         this.sliding = false;
+                //         this.canSlide = false;
+                //         this.xVelocity = 0;
+                //         this.dashSpeed = 0;
+                //     }
+                // }
+
+                // if(this.collidingRight && this.xVelocity > 0) {
+                //     this.xVelocity = 0;
+                // }
+
+                // if(this.collidingLeft && this.xVelocity < 0) {
+                //     this.xVelocity = 0;
+                // }
+            }
+        }
+
+        //platform collision
+        for (let i = 0; i < level.platforms.length; i++) {
+            this.collisionCheck(level.platforms[i]);
+            if(this.inCollision) {
+                if(this.collidingTop) {
+                    if (this.jumping) {
+                        this.jumpHeight = 0;
+                        this.jumping = false;
+                        this.melee = false;
+                        this.shooting = false;
+                        this.idle();
+                    }
+
+                    if(this.onGround) {
+                        if(this.lookingRight) {
+                            this.dashSpeed += 304;
+                        } else {
+                            this.dashSpeed -= 304;
+                        }
+
+                        this.collidingRight = false;
+                        this.collidingLeft = false;
+
+                        if(this.sliding === false) {
+                            this.sliding = true;
+                        }
+                    } else {
+                        this.dashSpeed = 0;
+                        this.sliding = false;
+                    }
+                    this.yVelocity = 0;
+                }
+
+                if(this.collidingBottom) {
+                    this.onPlatform = true;
+                    this.collidingLeft = false;
+                    this.collidingRight = false;
+                } else {
+                    //this.onPlatform = false;
+                    if(this.y < level.groundY && this.onGround === false && this.jumping === false) {
+                        this.idle();
+                    }
+                }
+
+                if(this.collidingRight || this.collidingLeft && this.collidingTop === false) {
                     if(this.sliding) {
                         this.sliding = false;
                         this.canSlide = false;
                         this.xVelocity = 0;
                         this.dashSpeed = 0;
+                        this.idle();
                     }
                 }
 
@@ -105,9 +184,9 @@ class Player {
                 if(this.collidingLeft && this.xVelocity < 0) {
                     this.xVelocity = 0;
                 }
-            } else {
+           } else {
                 this.onPlatform = false;
-            }
+           }
         }
 
         //attacking collision
@@ -115,20 +194,20 @@ class Player {
             let takeHit = false;
             for (let i = 0; i < level.enemies.length; i++) {
                 if (this.lookingRight) {
-                    if(this.right() + this.meleeRange >= level.enemies[i].left()) {
+                    if(this.right() + this.meleeRange >= level.enemies[i].left() && level.enemies[i].left() > this.right()) {
                         takeHit = true;
                         this.canMeleeDamage = false;
-                        level.enemies[i].x += 120;
+                        level.enemies[i].x += 100;
                     }
                 } else {
-                    if(level.enemies[i].right() >= this.left()) {
+                    if(this.left() + this.meleeRange <= level.enemies[i].right() && level.enemies[i].right() < this.left()) {
                         takeHit = true;
                         this.canMeleeDamage = false;
-                        level.enemies[i].x -= 120;
+                        level.enemies[i].x -= 100;
                     }
                 }
                 if(takeHit) {
-                    level.enemies[i].receiveDmg();
+                    level.enemies[i].receiveDmg(this.meleeDamage);
                     level.enemies[i].updateEnemy();
                     if(level.enemies[i].health <= 0) {
                         level.enemies.splice(i, 1);
@@ -137,6 +216,39 @@ class Player {
             }
         }
 
+        //super shot
+        if(this.superShotTimer % 200 === 0) {
+            this.superShot = true;
+        }
+
+        //when shooting
+        if(this.shooting) {
+            this.superShotTimer = 1;
+            this.updateSuperShot();
+            if(this.superShot === true) {
+                this.bullets.push(new Bullet(true)); //true stands for super bullet
+                this.superShot = false;
+            }
+            
+            if(this.newBulletTimer % 18 === 0) {
+                this.bullets.push(new Bullet());
+            }
+            this.newBulletTimer++;
+        } else {
+            this.newBulletTimer = 9;
+            if(this.superShotTimer < 200) {
+                this.superShotTimer++;
+            }
+        }
+
+        //updating and removing out of sight bullets
+        for(let i = 0; i < this.bullets.length; i++) {
+            this.bullets[i].updateBullet();
+
+            if(this.bullets[i].x > canvas.width || this.bullets[i] < 0 || this.bullets[i].hitEnemy()) {
+                this.bullets.splice(i, 1);
+            }
+        }
 
         if(this.y < level.groundY && this.onPlatform === false) {
             this.onGround = false;
@@ -155,6 +267,7 @@ class Player {
             //this.y -= 16;
             this.y -= 12;
             this.jumpHeight -= 12;
+            this.onPlatform = false;
         } else if(this.jumping && this.jumpHeight <= 0 && this.melee === false) {
             this.idle();
             this.jumping = false;
@@ -193,23 +306,24 @@ class Player {
         this.y += this.yVelocity;
 
         if(this.sliding) {
+            this.shooting = false;
             if(this.dashSpeed > 0) {
                 if(canMoveRight) {
-                    this.x += 5;
-                    this.dashSpeed -= 5;
+                    this.x += 8;
+                    this.dashSpeed -= 8;
                 } 
                 if(! canMoveRight) {
-                    level.speed += 5;
-                    this.dashSpeed -= 5;
+                    level.speed += 8;
+                    this.dashSpeed -= 8;
                 }
             } else if(this.dashSpeed < 0) {
                 if(canMoveLeft && level.x >= 0) {
-                    this.x -= 5;
-                    this.dashSpeed += 5;
+                    this.x -= 8;
+                    this.dashSpeed += 8;
                 }     
                 if(canMoveLeft && this.dashSpeed < 0 && this.x <= this.maxRight) {
-                    level.speed -= 5;
-                    this.dashSpeed -= 5;
+                    level.speed -= 8;
+                    this.dashSpeed -= 8;
                 }
             } else if(this.dashSpeed === 0) {
                 this.idle();
@@ -231,22 +345,24 @@ class Player {
         this.collidingBottom = false;
 }
 
-    left() { return this.x + 50; }
+    left() { return this.x + 45; }
     right() { return this.x + this.width - 50; }
     top() { return this.y + 10; }
-    bottom() { return this.y + this.height - 10; }
+    bottom() { return this.y + this.height - 8; }
 
-    collisionCheck(obstacle, attackRange) { //attack range used when in battle
+    collisionCheck(obstacle) { //attack range used when in battle
         let right = this.right();
         let left = this.left();
-        if (this.lookingRight && attackRange > 0) {
-            right += attackRange;
-        } else if(attackRange > 0){
-            left += attackRange;
+        let top = this.top();
+
+        if(this.sliding) { 
+            top = this.top() + 50;
+            right -= 15;
+            left += 15;
         }
 
         let colliding = ! (this.bottom() < obstacle.top() ||
-        this.top() > obstacle.bottom() ||
+        top > obstacle.bottom() ||
         right < obstacle.left() ||
         left > obstacle.right());
 
@@ -259,13 +375,13 @@ class Player {
             }
             //check type of collision - top, left, right
             
-            this.collidingBottom = this.bottom() > obstacle.top() && (right > obstacle.left() && left < obstacle.right());
-            
-            if(!this.collidingBottom) {
-            this.collidingLeft = left <= obstacle.right() && right > obstacle.right() && (!(this.bottom() <= obstacle.top() && this.top() >= obstacle.bottom()));
-            this.collidingRight = right >= obstacle.left() && left < obstacle.left() && (!(this.bottom() <= obstacle.top() && this.top() >= obstacle.bottom()));
-            this.collidingTop = this.top() <= obstacle.bottom() && this.bottom() < obstacle.top() && right > obstacle.left() && left < obstacle.right();
-            }
+            this.collidingBottom = this.y + this.height < obstacle.y + obstacle.height && this.bottom() >= obstacle.top() && right - 20 > obstacle.left() && left + 20 < obstacle.right();
+            //if(!this.collidingBottom) {
+            this.collidingLeft = this.lookingRight === false && left <= obstacle.right() && right > obstacle.right() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
+            this.collidingRight = this.lookingRight && right >= obstacle.left() && left < obstacle.left() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
+            //this.collidingTop = top <= obstacle.bottom() && this.bottom() > obstacle.bottom() && right + 10 > obstacle.left() && left < obstacle.right();
+            this.collidingTop = top < obstacle.bottom() && this.bottom() > obstacle.top() && right - 20 > obstacle.left() && left + 25 < obstacle.right();
+            //}
             //this.collidingBottom = xMiddle >= obstacle.top() && xMiddle >= obstacle.top() && xMiddle <= obstacle.top() + obstacle.width;
             //this.collidingBottom = obstacle.top() <= x || obstacle.y > x && obstacle.top() + obstacle.width < x;
             //this.collidingBottom = this.top() > obstacleBottom && this.left() < obstacle.right() && this.left() > obstacle.left() && this.top()  < obstacle.top();
@@ -276,9 +392,9 @@ class Player {
         return colliding;
     }
 
-    receiveDmg() {
+    receiveDmg(damageValue) {
         if(this.health > 0) {
-            this.health--;
+            this.health -= damageValue;
         } else {
             currentGame.hasEnded = true;
         }
@@ -322,7 +438,6 @@ class Player {
                 //this.animating = false;
                 this.melee = false;
                 this.shooting = false;
-                console.log('entrou');
             }
         }
         jumpType.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
@@ -366,5 +481,16 @@ class Player {
         this.animating = true;
         this.idleAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
         this.animating = false;
+    }
+
+    updateSuperShot() {
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 4;
+        ctx.fillRect(50, 100, this.superShotTimer, 50);
+        ctx.strokeRect(50, 100, 200, 50);
+        
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillStyle = 'red';
+        ctx.fillText(`SUPER SHOT`, 80, 132);
     }
 }

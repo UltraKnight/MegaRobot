@@ -1,17 +1,23 @@
 const level = {
     layers: [
-        './images/levels/level-1/level-1.png',
-        './images/levels/level-1/level-1-front.png'
+        './images/levels/level-2/level-2.png',
+        './images/levels/level-2/level-2-front.png'
     ],
     x: 0,
     speed: 0,
     speedAcumulator: 0, //used to make other resources scroll with the level
     newEnemyTimer: 0,
     enemies: [],
+    bombs: [],
     maxRobots: 20,
-    remainingRobots: 20,
+    remainingRobots: 20, //remaining to be spawned
     traps: [],
     platforms: [],
+    platformsPos: [[500, 500], [700, 500]],
+    platformsSrc: [
+        './images/platforms/tile_middle.png',
+        './images/platforms/tile_middle.png'
+    ],
     groundY: 500,
 
     drawBack(source = this.layers[0], y = 0) {
@@ -31,7 +37,7 @@ const level = {
              this.speed = 0;
          }
 
-         if(this.x <= -8500 && this.speed > 0) {
+         if(this.speedAcumulator >= 8500 && this.speed > 0) {
              this.speed = 0;
          }
 
@@ -46,6 +52,10 @@ const level = {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.drawBack();
         
+        for (let i = 0; i < this.platforms.length; i++) {
+            this.platforms[i].draw();
+        }
+
         //update enemies
         for (let i = 0; i < this.enemies.length; i++) {
             this.enemies[i].updateEnemy();
@@ -61,6 +71,15 @@ const level = {
             this.newEnemyTimer++;
         }
 
+        //update bombs
+        for (let i = 0; i < level.bombs.length; i++) {
+            level.bombs[i].updateBomb();
+            if(level.bombs[i].hitPlayer() || level.bombs[i].x > canvas.width || level.bombs[i].x < 0 ||
+             level.bombs[i].y > canvas.height) {
+                level.bombs.splice(i, 1);
+            }
+        }
+        levelLastSpeed = this.speed;
         this.speed = 0;
-    },
+    }
 };

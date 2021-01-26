@@ -31,9 +31,12 @@
             <p>L = MELEE</p>
         </div>
         <div class='bottom'>
-            <button id="btn-play">PLAY</button>
-            <button id="btn-finish">END GAME</button>
+            <button id="btn-play-again" disabled>PLAY AGAIN</button>
+            <button id="btn-finish">QUIT</button>
         </div>
+    </div>
+    <div id='main-menu'>
+        <button id="btn-play">START GAME</button>
     </div>
     <div id="div-canvas">
         <canvas id="game-stage" width="1920" height="700"></canvas>
@@ -41,10 +44,13 @@
 
     <script src="./javascript/Level.js"></script>
     <script src="./javascript/Player.js"></script>
+    <script src="./javascript/Bullet.js"></script>
     <script src="./javascript/Game.js"></script>
     <script src="./javascript/ObjAnimation.js"></script>
     <script src="./javascript/Controller.js"></script>
     <script src="./javascript/Robot.js"></script>
+    <script src="./javascript/Bomb.js"></script>
+    <script src="./javascript/Platform.js"></script>
     <script src="./javascript/index.js"></script>
 </body>
 </html>
