@@ -22,6 +22,7 @@ class Game {
         document.getElementById("game-stage").style.display = "block";
         document.getElementById("main-menu").style.display = "none";
         //request = requestAnimationFrame(loop);
+        backSound.play();
         requestAnimationFrame(loop);
     }
     
@@ -35,6 +36,9 @@ class Game {
     }
 
     gameOver() {
+        backSound.stop();
+
+        
         if(this.player.health > 0) {
             ctx.font = 'bold 90px serif';
             ctx.fillStyle = 'red';

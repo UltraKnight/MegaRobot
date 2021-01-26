@@ -15,7 +15,7 @@ class Bullet {
         this.animation = new ObjAnimation(5, `./images/player/bullet/bullet.png`, 170, 139);
         if(superBullet) {
             this.width = 80;
-            this.height = 50;
+            this.height = 60;
             this.damageValue = 3;
             this.y -= 15;
         } else {

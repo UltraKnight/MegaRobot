@@ -16,6 +16,7 @@ function loop() {
             if(! (currentGame.player.jumping || currentGame.player.sliding)) {
                 currentGame.player.jumping = true;
                 currentGame.player.jumpHeight = 300;
+                jumpSound.play();
             }
         }
     }
@@ -40,14 +41,15 @@ function loop() {
                 currentGame.player.melee = true;
                 currentGame.player.canMelee = false;
                 currentGame.player.canMeleeDamage = true;
+                saberSound.play();
             }
         }
     }
 
     if(controller.j) {
-        if(!(currentGame.player.melee || currentGame.player.sliding)) {
+        if(!(currentGame.player.melee)) {
             currentGame.player.shooting = true;
-            if(controller.left === false && controller.right === false && currentGame.player.jumping === false) {
+            if(controller.left === false && controller.right === false && currentGame.player.jumping === false && currentGame.player.sliding === false) {
                 currentGame.player.shoot();
             }
         }

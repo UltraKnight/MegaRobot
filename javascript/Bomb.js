@@ -21,6 +21,9 @@ class Bomb {
     bottom() { return this.y + this.height - 5; }
 
     draw() {
+        if(this.goUp === 10) {
+            boomSound.play();
+        }
         if(this.goUp <= 10) {
             this.exploding.animate(true, this.rightOrLeft, this.x, this.y, this.width, this.height, 3);
         } else {
@@ -54,6 +57,7 @@ class Bomb {
             if(colliding) {
                 if(this.canDamage) {
                     currentGame.player.receiveDmg(this.damageValue);
+                    boomSound.play();
                     this.canDamage = false;
                 }
                 if(currentGame.player.health <= 0) {

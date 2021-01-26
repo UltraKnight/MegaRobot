@@ -226,15 +226,19 @@ class Player {
             this.superShotTimer = 1;
             this.updateSuperShot();
             if(this.superShot === true) {
+                superShotSound.play();
                 this.bullets.push(new Bullet(true)); //true stands for super bullet
                 this.superShot = false;
             }
-            
+
             if(this.newBulletTimer % 18 === 0) {
+                shootSound.play();
                 this.bullets.push(new Bullet());
+                this.newBulletTimer = 0;
             }
             this.newBulletTimer++;
         } else {
+            shootSound.stop();
             this.newBulletTimer = 9;
             if(this.superShotTimer < 200) {
                 this.superShotTimer++;
@@ -306,7 +310,7 @@ class Player {
         this.y += this.yVelocity;
 
         if(this.sliding) {
-            this.shooting = false;
+            //this.shooting = false;
             if(this.dashSpeed > 0) {
                 if(canMoveRight) {
                     this.x += 8;
@@ -433,12 +437,12 @@ class Player {
             //     this.melee = false;
             //     this.animating = false;
             //}
-            if(this.y >= 500 || this.onGround) {
-                //this.jumping = false;
-                //this.animating = false;
-                this.melee = false;
-                this.shooting = false;
-            }
+            // if(this.y >= 500 || this.onGround) {
+            //     //this.jumping = false;
+            //     //this.animating = false;
+                 this.melee = false;
+                 this.shooting = false;
+            // }
         }
         jumpType.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
     }
