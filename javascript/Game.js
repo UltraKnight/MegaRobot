@@ -15,12 +15,17 @@ class Game {
         cancelAnimationFrame(request);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        for (let i = 0; i < level.platformsSrc.length; i++) {
+        for(let i = 0; i < level.platformsSrc.length; i++) {
             level.platforms.push(new Platform(level.platformsSrc[i], level.platformsPos[i][0], level.platformsPos[i][1]));
+        }
+
+        for(let i = 0; i < level.trapsSrc.length; i++) {
+            level.traps.push(new Trap(level.trapsSrc[i], level.trapsPos[i][0], level.trapsPos[i][1]));
         }
 
         document.getElementById("game-stage").style.display = "block";
         document.getElementById("main-menu").style.display = "none";
+        document.getElementById("robot").style.display = "none";
         //request = requestAnimationFrame(loop);
         backSound.play();
         requestAnimationFrame(loop);
@@ -38,7 +43,7 @@ class Game {
     gameOver() {
         backSound.stop();
 
-        
+
         if(this.player.health > 0) {
             ctx.font = 'bold 90px serif';
             ctx.fillStyle = 'red';

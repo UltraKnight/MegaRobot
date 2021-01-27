@@ -1,7 +1,7 @@
 const level = {
     layers: [
-        './images/levels/level-2/level-2.png',
-        './images/levels/level-2/level-2-front.png'
+        './images/levels/level-1/level-1.png',
+        './images/levels/level-1/level-1-front.png'
     ],
     x: 0,
     speed: 0,
@@ -12,9 +12,17 @@ const level = {
     maxRobots: 20,
     remainingRobots: 20, //remaining to be spawned
     traps: [],
+    //trapsPos: [[3250, 500]],
+    trapsPos: [[300, 600]],
+    trapsSrc: [
+        `./images/levels/traps/saw/saw.png`
+    ],
     platforms: [],
-    platformsPos: [[500, 500], [700, 500]],
+    platformsPos: [[500, 460], [700, 490], [1200, 570], [3000, 560], [3250, 550]],
     platformsSrc: [
+        './images/platforms/tile_middle.png',
+        './images/platforms/tile_middle.png',
+        './images/platforms/tile_middle.png',
         './images/platforms/tile_middle.png',
         './images/platforms/tile_middle.png'
     ],
@@ -52,8 +60,15 @@ const level = {
         //ctx.clearRect(0, 0, canvas.width, canvas.height);
         this.drawBack();
         
+        //update platforms
         for (let i = 0; i < this.platforms.length; i++) {
             this.platforms[i].draw();
+        }
+
+        //update traps
+        for (let i = 0; i < this.traps.length; i++) {
+            this.traps[i].draw();
+            this.traps[i].hitPlayer();
         }
 
         //update enemies

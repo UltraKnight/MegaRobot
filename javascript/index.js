@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 let currentGame = new Game();
 currentGame.player = new Player();
 let request;
-let gravity = 0.70;
+let gravity = 0.67;
 let gravitySpeed = 0;
 let levelLastSpeed = 0;
 
@@ -15,7 +15,7 @@ function loop() {
         if (currentGame.player.onGround) {
             if(! (currentGame.player.jumping || currentGame.player.sliding)) {
                 currentGame.player.jumping = true;
-                currentGame.player.jumpHeight = 300;
+                currentGame.player.jumpHeight = 350;
                 jumpSound.play();
             }
         }
@@ -63,7 +63,7 @@ function loop() {
             currentGame.player.run();
         }
         if(! currentGame.player.sliding) {
-            currentGame.player.xVelocity = 5;
+            currentGame.player.xVelocity = 6;
         }
     }
 
@@ -76,7 +76,7 @@ function loop() {
         }
 
         if(! currentGame.player.sliding) {
-            currentGame.player.xVelocity = -5;
+            currentGame.player.xVelocity = -6;
         }
     }
 

@@ -22,7 +22,8 @@ class Player {
         this.sliding = false;
         this.shooting = false;
         this.lookingRight = true;
-
+        this.increaseFall = 0;
+        
         this.canSlide = true;
         this.canMelee = true;
         this.canMeleeDamage = true;
@@ -136,7 +137,7 @@ class Player {
                         this.idle();
                     }
 
-                    if(this.onGround) {
+                    if(this.y >= level.groundY && this.collidingLeft === false && this.collidingRight === false) {
                         if(this.lookingRight) {
                             this.dashSpeed += 304;
                         } else {
@@ -160,14 +161,15 @@ class Player {
                     this.onPlatform = true;
                     this.collidingLeft = false;
                     this.collidingRight = false;
+                    this.collidingTop = false;
                 } else {
-                    //this.onPlatform = false;
+                    this.onPlatform = false;
                     if(this.y < level.groundY && this.onGround === false && this.jumping === false) {
                         this.idle();
                     }
                 }
 
-                if(this.collidingRight || this.collidingLeft && this.collidingTop === false) {
+                if(this.collidingRight || this.collidingLeft && this.collidingTop === false && this.onPlatform === false) {
                     if(this.sliding) {
                         this.sliding = false;
                         this.canSlide = false;
@@ -256,27 +258,30 @@ class Player {
 
         if(this.y < level.groundY && this.onPlatform === false) {
             this.onGround = false;
+            if(this.jumping === false) {
+                this.idle();
+            }
         } else {
             this.onGround = true;
         }
 
-        if (! (this.onGround)) {
-            gravitySpeed += gravity;
-            this.y += Number(gravitySpeed.toFixed(2));
+        if (!this.onGround) {   
+          gravitySpeed += gravity;
+            this.y += gravitySpeed;
         } else {
             gravitySpeed = 0;
         }
 
         if(this.jumping && this.jumpHeight > 0) {
             //this.y -= 16;
-            this.y -= 12;
-            this.jumpHeight -= 12;
+            this.y -= 14;
+            this.jumpHeight -= 14;
             this.onPlatform = false;
         } else if(this.jumping && this.jumpHeight <= 0 && this.melee === false) {
-            this.idle();
+            //this.idle();
             this.jumping = false;
             this.melee = false;
-            this.animating = false;
+            //this.animating = false;
         }
 
         //just for test - should verify if the player can move
@@ -350,7 +355,7 @@ class Player {
 }
 
     left() { return this.x + 45; }
-    right() { return this.x + this.width - 50; }
+    right() { return this.x + this.width - 45; }
     top() { return this.y + 10; }
     bottom() { return this.y + this.height - 8; }
 
@@ -360,7 +365,7 @@ class Player {
         let top = this.top();
 
         if(this.sliding) { 
-            top = this.top() + 50;
+            top = this.top() + 40;
             right -= 15;
             left += 15;
         }
@@ -379,12 +384,12 @@ class Player {
             }
             //check type of collision - top, left, right
             
-            this.collidingBottom = this.y + this.height < obstacle.y + obstacle.height && this.bottom() >= obstacle.top() && right - 20 > obstacle.left() && left + 20 < obstacle.right();
+            this.collidingBottom = this.bottom() - 20 < obstacle.y && this.top() < obstacle.top() && right + 20 > obstacle.left() && left - 20 < obstacle.right();
             //if(!this.collidingBottom) {
             this.collidingLeft = this.lookingRight === false && left <= obstacle.right() && right > obstacle.right() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
             this.collidingRight = this.lookingRight && right >= obstacle.left() && left < obstacle.left() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
             //this.collidingTop = top <= obstacle.bottom() && this.bottom() > obstacle.bottom() && right + 10 > obstacle.left() && left < obstacle.right();
-            this.collidingTop = top < obstacle.bottom() && this.bottom() > obstacle.top() && right - 20 > obstacle.left() && left + 25 < obstacle.right();
+            this.collidingTop = top <= obstacle.bottom() && this.bottom() > obstacle.bottom() + 40 && right - 15 > obstacle.left() && left + 15 < obstacle.right(); //r -20 / l 25
             //}
             //this.collidingBottom = xMiddle >= obstacle.top() && xMiddle >= obstacle.top() && xMiddle <= obstacle.top() + obstacle.width;
             //this.collidingBottom = obstacle.top() <= x || obstacle.y > x && obstacle.top() + obstacle.width < x;

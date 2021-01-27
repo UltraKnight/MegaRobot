@@ -40,7 +40,7 @@ button:disabled {
     padding: 10px;
     font-weight: bold;
     color: white;
-    background-color:rgb(69, 69, 69);
+    background-color:rgba(69, 69, 69, 0.5);
 }
 
 button:enabled {
@@ -71,9 +71,21 @@ button:enabled:hover {
 
 #main-menu {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
     margin: 0 auto;
     width: 50%;
+}
+
+#robot {
+    margin-top: 60px;
+    height: 60vh;
+}
+
+#btn-play {
+    position: absolute;
+    margin: 0 auto;
+    top: 10%;
 }

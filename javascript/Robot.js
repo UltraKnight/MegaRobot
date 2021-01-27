@@ -5,7 +5,7 @@ class Robot {
         this.x = Math.floor(Math.random() * (8500 - currentGame.player.x - 900) + currentGame.player.x + 900);
         //this.x = canvas.width; // for testing
         this.y = level.groundY;
-        this.health = enemyType + 2;
+        this.health = enemyType + 4;
         this.width = 180;
         this.height = 190;
         //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
