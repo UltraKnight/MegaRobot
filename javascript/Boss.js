@@ -2,7 +2,7 @@ class Boss {
     constructor() {
         let enemyType = 3;
         
-        this.x = 1800;
+        this.x = 1800; // its correct, its the level x axis that must be changed
         this.y = 200;
         this.health = 40;
         this.width = 400;

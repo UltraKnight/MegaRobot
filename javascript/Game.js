@@ -4,17 +4,24 @@ class Game {
         this.controller = {};
         this.collectors = {}; //object of array of items of the game like -> life, armor parts, etc.
         this.hasEnded = false;
+        this.lastLevel = 1;
     }
 
     startGame() {
         if(this.hasEnded) {
             sessionStorage.setItem("reloading", "true");
-            location.reload();
+            request = null;
+            window.location.href = window.location.href;
+        }
+
+        if(currentLevel > 1) {
+            goTo(currentLevel);
+            this.hasEnded = false;
         }
 
         cancelAnimationFrame(request);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+        
         for(let i = 0; i < level.platformsSrc.length; i++) {
             level.platforms.push(new Platform(level.platformsSrc[i], level.platformsPos[i][0], level.platformsPos[i][1]));
         }
@@ -25,7 +32,8 @@ class Game {
 
         for(let i = 0; i < level.collectorsSrc.length; i++) {
             level.collectors.push(new Collector(level.collectorsSrc[i], level.collPos[i][0], 
-                level.collPos[i][1], level.collPos[i][2], level.collPos[i][3], level.collPos[i][4]));
+                level.collPos[i][1], level.collPos[i][2], level.collPos[i][3], level.collPos[i][4],
+                level.collPos[i][5]));
         }
 
         document.getElementById("game-stage").style.display = "block";
@@ -47,16 +55,41 @@ class Game {
 
     gameOver() {
         backSound.stop();
-
+        const btnPlay = document.getElementById('btn-play-again');
+        btnPlay.disabled = false;
 
         if(this.player.health > 0) {
-            ctx.font = 'bold 90px serif';
-            ctx.fillStyle = 'red';
-            ctx.fillText(`CONGRATULATIONS!!! YOU SURVIVED!!!`, 50, canvas.height / 2 - 20);
+            if (currentLevel < this.lastLevel) {
+                ctx.font = 'bold 90px serif';
+                ctx.fillStyle = 'red';
+                ctx.fillText(`CONGRATULATIONS!!! YOU SURVIVED!!!`, 50, canvas.height / 2 - 20);
+                ctx.font = '40px sans-serif';
+                ctx.fillStyle = 'white';
+                ctx.fillText(`It's not over yet... Click on the NEXT LEVEL button when you're ready!`, 80, canvas.height / 2 + 50);
+                currentLevel++;
+                btnPlay.innerHTML = 'NEXT LEVEL';
+                
+                document.removeEventListener('keydown', controller.keyListener);
+                document.removeEventListener('keyup', controller.keyListener);
+                if(! sessionStorage.getItem("nextLevel")) {
+                    sessionStorage.setItem("nextLevel", String(currentLevel));
+                }
+            } else {
+                ctx.font = 'bold 60px serif';
+                ctx.fillStyle = 'red';
+                ctx.fillText(`THAT'S IT! YOU BEATED THE GAME AND SAVED THE WORLD!`, 50, canvas.height / 2 - 20);
+                currentLevel = 1;
+            }
+            
         } else {
+            btnPlay.innerHTML = 'PLAY AGAIN';
             ctx.font = 'bold 100px serif';
             ctx.fillStyle = 'red';
             ctx.fillText(`YOU DIED`, canvas.width / 2 - 300, canvas.height / 2 - 20);
+            currentLevel = 1;
+            if(sessionStorage.getItem("nextLevel")) {
+                sessionStorage.removeItem("nextLevel");
+            }
         }
     }
 
@@ -70,12 +103,12 @@ class Game {
         ctx.fillStyle = 'gold';
         ctx.fillText(`${s}`, 
          canvas.width / 2 - 240, canvas.height / 2 - 250);
-        ctx.fillText('Press ESC to continue.',
+        ctx.fillText('Press SPACE to continue.',
          canvas.width / 2 - 240, canvas.height / 2 - 250 + 30);
     }
 
     finishGame() {
         //cancelAnimationFrame(request);
-        location.reload();
+        window.location.href = window.location.href;
     }
 }

@@ -2,11 +2,12 @@ const canvas = document.getElementById('game-stage');
 const ctx = canvas.getContext('2d');
 
 let currentGame = new Game();
-currentGame.player = new Player();
+let currentLevel = 1;
 let request;
 let gravity = 0.67;
 let gravitySpeed = 0;
 let levelLastSpeed = 0;
+currentGame.player = new Player();
 
 function loop() {
     if(controller.pause) {
@@ -113,7 +114,7 @@ function loop() {
     }
     
     if(currentGame.hasEnded) {
-        document.getElementById('btn-play-again').disabled = false;
+        request = requestAnimationFrame(loop);
         cancelAnimationFrame(request);
         currentGame.gameOver();
         return;
@@ -132,8 +133,14 @@ window.onload = () => {
     document.getElementById('btn-finish').onclick = () => { currentGame.finishGame(); };
 
     let reloading = sessionStorage.getItem("reloading");
+    let nextLevel = sessionStorage.getItem("nextLevel");
+
     if (reloading) {
         sessionStorage.removeItem("reloading");
+        if(nextLevel) {
+            currentLevel = parseInt(nextLevel);
+            sessionStorage.removeItem("nextLevel");
+        }
         currentGame.startGame();
     }
 

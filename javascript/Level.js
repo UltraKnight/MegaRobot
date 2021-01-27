@@ -7,20 +7,28 @@ const level = {
     speed: 0,
     speedAcumulator: 0, //used to make other resources scroll with the level
     newEnemyTimer: 0,
+    spawnTimer: 250,
     bossSpawned: false,
     enemies: [],
     bombs: [],
     maxRobots: 20,
-    remainingRobots: 20, //remaining to be spawned
+    remainingRobots: 0, //remaining to be spawned
     traps: [],
     collectors: [],
-    collPos: [[3410, 500, 'hp', 247, 224], [4100, 500, 'super-shot', 247, 304]], //x, y, animation width, animation height
+    collPos: [
+        [3410, 500, 'hp', 247, 224, 2],
+        [4100, 500, 'super-shot', 247, 304, 2],
+        [6000, 600, 'rapid-s', 300, 300, 6]
+    ], //x, y, animation width, animation height
     collectorsSrc: [
         `./images/collectors/hp/hp-plus.png`,
-        `./images/collectors/super-shot/super-bonus.png`
+        `./images/collectors/super-shot/super-bonus.png`,
+        `./images/collectors/rapid-s/rapid-s.png`
     ],
-    trapsPos: [[300, 600], [3335, 540]],
+    trapsPos: [[300, 600], [3335, 540], [6000, 630], [6500, 630]],
     trapsSrc: [
+        `./images/levels/traps/saw/saw.png`,
+        `./images/levels/traps/saw/saw.png`,
         `./images/levels/traps/saw/saw.png`,
         `./images/levels/traps/saw/saw.png`,
     ],
@@ -102,7 +110,7 @@ const level = {
 
         if(this.remainingRobots > 0) {
             //create enemies
-            if(this.newEnemyTimer % 250 === 0) {
+            if(this.newEnemyTimer % this.spawnTimer === 0) {
                 this.remainingRobots--;
                 this.newEnemyTimer = 0;
                 this.enemies.push(new Robot());
@@ -113,12 +121,18 @@ const level = {
         //put the boss on the map
         if(this.speedAcumulator >= 7000 && this.bossSpawned === false) {
             this.bossSpawned = true;
+            currentGame.message("BOSS BATTLE  -  S U P E R   R O B O T");
             this.enemies.push(new Boss());
-        }
 
-        if(this.bossSpawned) {
-            //play boss sound
-            bossLaugh.play();
+            const laughAfterSpace = setInterval(() => {
+                if (! controller.pause) {
+                    bossLaugh.play();
+                    clearInterval(laughAfterSpace);
+                }
+            }, 100);
+
+            cancelAnimationFrame(request);
+            return;
         }
 
         //update bombs

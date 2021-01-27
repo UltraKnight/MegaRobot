@@ -31,6 +31,7 @@ class Player {
         this.newBulletTimer = 0;
         this.superShotTimer = 1;
         this.superCounter = 200;
+        this.shootCounter = 18;
 
         this.inCollision = false;
         this.inCollisionWithEnemy = false;
@@ -71,7 +72,7 @@ class Player {
         let canMoveLeft = true;
         let canMoveRight = true;
         //If is in the end of the level, then game over
-        if(level.speedAcumulator >= 8500) {
+        if(level.speedAcumulator >= 8500 && currentGame.hasEnded === false) {
             currentGame.hasEnded = true;
         }
         //normal collision
@@ -234,7 +235,7 @@ class Player {
                 this.superShot = false;
             }
 
-            if(this.newBulletTimer % 18 === 0) {
+            if(this.newBulletTimer % this.shootCounter === 0) {
                 shootSound.play();
                 this.bullets.push(new Bullet());
                 this.newBulletTimer = 0;
@@ -278,8 +279,8 @@ class Player {
             this.y -= 14;
             this.jumpHeight -= 14;
             this.onPlatform = false;
-        } else if(this.jumping && this.jumpHeight <= 0 && this.melee === false) {
-            //this.idle();
+        } else if(this.jumping && this.jumpHeight <= 0) {
+            this.idle();
             this.jumping = false;
             this.melee = false;
             //this.animating = false;
@@ -403,9 +404,10 @@ class Player {
     }
 
     receiveDmg(damageValue) {
-        if(this.health > 0) {
+        if(this.health > 0 && damageValue <= this.health) {
             this.health -= damageValue;
-        } else {
+        } else if(currentGame.hasEnded === false) {
+            this.health = 0;
             currentGame.hasEnded = true;
         }
     }
@@ -438,7 +440,8 @@ class Player {
 
         if(this.jumping) {
             this.animating = true;  //doesn't reset the animation if is still jumping
-            //if(jumpType.currentFrame === jumpType.totalFrames) {
+            if(jumpType.currentFrame < jumpType.totalFrames) {
+                this.animating = true;
             //     this.jumping = false; //finish jumping
             //     this.melee = false;
             //     this.animating = false;
@@ -446,9 +449,11 @@ class Player {
             // if(this.y >= 500 || this.onGround) {
             //     //this.jumping = false;
             //     //this.animating = false;
-                 this.melee = false;
-                 this.shooting = false;
-            // }
+                //  this.melee = false;
+                //  this.shooting = false;
+             } else {
+                 this.animating = false;
+             }
         }
         jumpType.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
     }

@@ -1,5 +1,5 @@
 class Collector {
-    constructor(source, x, y, type, animW = 247, animH = 224) {
+    constructor(source, x, y, type, animW, animH, cols) {
         this.x = x;
         this.y = y;
         this.width = 50;
@@ -8,6 +8,7 @@ class Collector {
         this.damageValue = 3;
         this.canDamage = true;
         this.type = type;
+        this.cols = cols;
     }
 
     left() { return this.x; }
@@ -20,7 +21,7 @@ class Collector {
         if(this.x < canvas.width - 300 && this.y > - 60) {
             this.y -= 1;
         }
-        this.animation.animate(true, true, this.x, this.y, this.width, this.height, 2); //cols
+        this.animation.animate(true, true, this.x, this.y, this.width, this.height, this.cols); //cols
     }
 
     updateCollector() {
@@ -74,6 +75,10 @@ class Collector {
                     // currentGame.player.shooting = true;
                     // currentGame.player.move();
                     // currentGame.player.shooting = false;
+                    break;
+                case 'rapid-s':
+                    currentGame.message('Shoot shoot shoot...');
+                    currentGame.player.shootCounter = 14;
                     break;
             }
             return colliding; //if colliding the bullet will be removed in the player move()

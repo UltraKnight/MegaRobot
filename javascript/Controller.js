@@ -34,6 +34,7 @@ const controller = {
       currentGame.player.animating = false; //reset next player animation
       switch(e.code) {
         case 'Escape':
+        case 'Space':
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
