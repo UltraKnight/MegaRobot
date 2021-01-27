@@ -20,13 +20,13 @@ class Sound {
     }
 }
 
-backSound = new Sound('./sounds/background/Twin Musicom - Big Birds Date Night Full Version.mp3', true, 0.6);
-jumpSound = new Sound('./sounds/effects/jump.wav', false, 1);
-shootSound = new Sound('./sounds/effects/shot.mp3', false, 0.9);
-superShotSound = new Sound('./sounds/effects/super-shot.wav', false, 1);
-saberSound = new Sound('./sounds/effects/saber.mp3', false, 1);
-boomSound = new Sound('./sounds/effects/boom.wav', false, 1);
-sawSound = new Sound('./sounds/effects/saw.mp3', false, 1);
-sawSound2 = new Sound('./sounds/effects/saw2.mp3', false, 0.9);
-hpPlusSound = new Sound('./sounds/effects/pickup.wav', false, 1);
-bossLaugh = new Sound('./sounds/effects/boss-laugh.mp3', false, 1);
+let backSound = new Sound('./sounds/background/Twin Musicom - Big Birds Date Night Full Version.mp3', true, 0.8);
+let jumpSound = new Sound('./sounds/effects/jump.wav', false, 1);
+let shootSound = new Sound('./sounds/effects/shot.mp3', false, 0.9);
+let superShotSound = new Sound('./sounds/effects/super-shot.wav', false, 1);
+let saberSound = new Sound('./sounds/effects/saber.mp3', false, 1);
+let boomSound = new Sound('./sounds/effects/boom.wav', false, 1);
+let sawSound = new Sound('./sounds/effects/saw.mp3', false, 1);
+let sawSound2 = new Sound('./sounds/effects/saw2.mp3', false, 0.9);
+let hpPlusSound = new Sound('./sounds/effects/pickup.wav', false, 1);
+let bossLaugh = new Sound('./sounds/effects/boss-laugh.mp3', false, 1);

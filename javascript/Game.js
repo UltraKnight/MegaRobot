@@ -4,7 +4,7 @@ class Game {
         this.controller = {};
         this.collectors = {}; //object of array of items of the game like -> life, armor parts, etc.
         this.hasEnded = false;
-        this.lastLevel = 1;
+        this.lastLevel = 2;
     }
 
     startGame() {
@@ -86,6 +86,7 @@ class Game {
             ctx.font = 'bold 100px serif';
             ctx.fillStyle = 'red';
             ctx.fillText(`YOU DIED`, canvas.width / 2 - 300, canvas.height / 2 - 20);
+
             currentLevel = 1;
             if(sessionStorage.getItem("nextLevel")) {
                 sessionStorage.removeItem("nextLevel");

@@ -22,17 +22,29 @@
 </head>
 <body>
     <div class='main'>
-        <h1>Controls</h1>
         <div class='top'>
+            <h1>Controls</h1>
             <p>A/D = MOVEMENT</p>
+            <span>|</span>
             <p>S = DASH</p>
+            <span>|</span>
             <P>K or W = JUMP</P>
+            <span>|</span>
             <p>J (hold) = SHOOT</p>
+            <span>|</span>
             <p>L = MELEE</p>
         </div>
         <div class='bottom'>
-            <button id="btn-play-again" disabled>PLAY AGAIN</button>
-            <button id="btn-finish">QUIT</button>
+            <div class="buttons">
+                <button id="btn-play-again" disabled>PLAY AGAIN</button>
+                <button id="btn-finish">QUIT</button>
+            </div>
+            <div class="bars">
+                <label for="volume-control">Music</label>
+                <input type="range" min="1" max="100" value="80" class="slider" id="volume-control">
+                <label for="volume-control">Effects</label>
+                <input type="range" min="1" max="100" value="100" class="slider" id="volume-effects">
+            </div>
         </div>
     </div>
     <div id='main-menu'>

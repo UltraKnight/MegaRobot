@@ -413,6 +413,7 @@ class Player {
     }
 
     die() {
+        this.animating = true;
         this.dieAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
         this.animating = true;
     }

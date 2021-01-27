@@ -13,7 +13,6 @@ function loop() {
     if(controller.pause) {
         return;
     }
-
     level.updateLevel();
 
     if(controller.k) {
@@ -114,16 +113,36 @@ function loop() {
     }
     
     if(currentGame.hasEnded) {
-        request = requestAnimationFrame(loop);
         cancelAnimationFrame(request);
-        currentGame.gameOver();
+        if(currentGame.player.health === 0) {
+            request = requestAnimationFrame(dying);
+        } else {
+            currentGame.gameOver();
+        }
         return;
     }
 
     request = requestAnimationFrame(loop);
 }
+cancelAnimationFrame(request);
+
+function dying() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    level.updateLevel();
+    currentGame.player.die();
+    if(currentGame.player.dieAnimation.currentFrame === currentGame.player.dieAnimation.totalFrames) {
+        cancelAnimationFrame(request);
+        this.animating = false;
+        currentGame.gameOver();
+        return;
+    }
+    request = requestAnimationFrame(dying);
+}
 
 window.onload = () => {
+    let reloading = sessionStorage.getItem("reloading");
+    let nextLevel = sessionStorage.getItem("nextLevel");
+
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     document.getElementById('btn-play').onclick = () => { currentGame.startGame(); };
@@ -131,9 +150,10 @@ window.onload = () => {
     document.getElementById('btn-play').onmouseout = () => { changeImageBack(); };
     document.getElementById('btn-play-again').onclick = () => { currentGame.startGame(); };
     document.getElementById('btn-finish').onclick = () => { currentGame.finishGame(); };
-
-    let reloading = sessionStorage.getItem("reloading");
-    let nextLevel = sessionStorage.getItem("nextLevel");
+    document.getElementById('volume-control').onclick = (e) => {
+        backSound.sound.volume = e.target.value / 100;
+     };
+    document.getElementById('volume-effects').onchange = (e) => { changeAllEffects(e); };
 
     if (reloading) {
         sessionStorage.removeItem("reloading");
@@ -143,12 +163,21 @@ window.onload = () => {
         }
         currentGame.startGame();
     }
+};
 
-    function changeImage() {
-        document.getElementById("robot").src = "./images/cover-hover.png";
-    }
+function changeImage() {
+    document.getElementById("robot").src = "./images/cover-hover.png";
+}
 
-    function changeImageBack() {
-        document.getElementById("robot").src = "./images/cover.png";
-    }
+function changeImageBack() {
+    document.getElementById("robot").src = "./images/cover.png";
+}
+
+const changeAllEffects = e => {
+    let sounds = [jumpSound, shootSound, superShotSound, 
+        saberSound, boomSound, sawSound, sawSound2, hpPlusSound, bossLaugh];
+    sessionStorage.setItem('volumeEffects', String(e.target.value));
+    sounds.forEach(sound => {
+        sound.sound.volume = e.target.value / 100;
+    });
 };

@@ -12,7 +12,7 @@ const level = {
     enemies: [],
     bombs: [],
     maxRobots: 20,
-    remainingRobots: 0, //remaining to be spawned
+    remainingRobots: 20, //remaining to be spawned
     traps: [],
     collectors: [],
     collPos: [
@@ -122,7 +122,7 @@ const level = {
         if(this.speedAcumulator >= 7000 && this.bossSpawned === false) {
             this.bossSpawned = true;
             currentGame.message("BOSS BATTLE  -  S U P E R   R O B O T");
-            this.enemies.push(new Boss());
+            this.enemies.push(new Boss(currentLevel));
 
             const laughAfterSpace = setInterval(() => {
                 if (! controller.pause) {
