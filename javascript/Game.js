@@ -23,6 +23,11 @@ class Game {
             level.traps.push(new Trap(level.trapsSrc[i], level.trapsPos[i][0], level.trapsPos[i][1]));
         }
 
+        for(let i = 0; i < level.collectorsSrc.length; i++) {
+            level.collectors.push(new Collector(level.collectorsSrc[i], level.collPos[i][0], 
+                level.collPos[i][1], level.collPos[i][2], level.collPos[i][3], level.collPos[i][4]));
+        }
+
         document.getElementById("game-stage").style.display = "block";
         document.getElementById("main-menu").style.display = "none";
         document.getElementById("robot").style.display = "none";
@@ -53,6 +58,20 @@ class Game {
             ctx.fillStyle = 'red';
             ctx.fillText(`YOU DIED`, canvas.width / 2 - 300, canvas.height / 2 - 20);
         }
+    }
+
+    message(s) {
+        controller.pause = true;
+
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 1;
+        ctx.fillRect(canvas.width / 2 - 250, canvas.height / 2 - 280, 500, 200);
+        ctx.font = 'bold 20px sans-serif';
+        ctx.fillStyle = 'gold';
+        ctx.fillText(`${s}`, 
+         canvas.width / 2 - 240, canvas.height / 2 - 250);
+        ctx.fillText('Press ESC to continue.',
+         canvas.width / 2 - 240, canvas.height / 2 - 250 + 30);
     }
 
     finishGame() {

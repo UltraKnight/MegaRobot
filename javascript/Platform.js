@@ -10,7 +10,7 @@ class Platform {
     left() { return this.x; }
     right() { return this.x + this.width; }
     top() { return this.y; }
-    bottom() { return this.y + this.height - 50; }
+    bottom() { return this.y + this.height - 45; }
 
     draw() {
         let img = new Image();

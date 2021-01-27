@@ -9,6 +9,10 @@ let gravitySpeed = 0;
 let levelLastSpeed = 0;
 
 function loop() {
+    if(controller.pause) {
+        return;
+    }
+
     level.updateLevel();
 
     if(controller.k) {
@@ -115,10 +119,6 @@ function loop() {
         return;
     }
 
-    if(controller.pause) {
-        return;
-    }
-
     request = requestAnimationFrame(loop);
 }
 
@@ -126,6 +126,8 @@ window.onload = () => {
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     document.getElementById('btn-play').onclick = () => { currentGame.startGame(); };
+    document.getElementById('btn-play').onmouseover = () => { changeImage(); };
+    document.getElementById('btn-play').onmouseout = () => { changeImageBack(); };
     document.getElementById('btn-play-again').onclick = () => { currentGame.startGame(); };
     document.getElementById('btn-finish').onclick = () => { currentGame.finishGame(); };
 
@@ -133,5 +135,13 @@ window.onload = () => {
     if (reloading) {
         sessionStorage.removeItem("reloading");
         currentGame.startGame();
+    }
+
+    function changeImage() {
+        document.getElementById("robot").src = "./images/cover-hover.png";
+    }
+
+    function changeImageBack() {
+        document.getElementById("robot").src = "./images/cover.png";
     }
 };

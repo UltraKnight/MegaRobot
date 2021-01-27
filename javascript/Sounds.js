@@ -26,3 +26,7 @@ shootSound = new Sound('./sounds/effects/shot.mp3', false, 0.9);
 superShotSound = new Sound('./sounds/effects/super-shot.wav', false, 1);
 saberSound = new Sound('./sounds/effects/saber.mp3', false, 1);
 boomSound = new Sound('./sounds/effects/boom.wav', false, 1);
+sawSound = new Sound('./sounds/effects/saw.mp3', false, 1);
+sawSound2 = new Sound('./sounds/effects/saw2.mp3', false, 0.9);
+hpPlusSound = new Sound('./sounds/effects/pickup.wav', false, 1);
+bossLaugh = new Sound('./sounds/effects/boss-laugh.mp3', false, 1);

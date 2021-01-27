@@ -30,6 +30,7 @@ class Player {
         
         this.newBulletTimer = 0;
         this.superShotTimer = 1;
+        this.superCounter = 200;
 
         this.inCollision = false;
         this.inCollisionWithEnemy = false;
@@ -219,7 +220,7 @@ class Player {
         }
 
         //super shot
-        if(this.superShotTimer % 200 === 0) {
+        if(this.superShotTimer % this.superCounter === 0) {
             this.superShot = true;
         }
 
@@ -242,7 +243,7 @@ class Player {
         } else {
             shootSound.stop();
             this.newBulletTimer = 9;
-            if(this.superShotTimer < 200) {
+            if(this.superShotTimer < this.superCounter) {
                 this.superShotTimer++;
             }
         }
@@ -495,11 +496,18 @@ class Player {
     updateSuperShot() {
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 4;
-        ctx.fillRect(50, 100, this.superShotTimer, 50);
-        ctx.strokeRect(50, 100, 200, 50);
-        
         ctx.font = 'bold 20px sans-serif';
-        ctx.fillStyle = 'red';
-        ctx.fillText(`SUPER SHOT`, 80, 132);
+        ctx.fillStyle = 'gold';
+
+        if(this.superCounter === 100) {
+            ctx.fillRect(50, 100, this.superShotTimer * 2, 50);
+            ctx.fillStyle = 'green';
+            ctx.fillText(`FASTER SHOT`, 80, 132);
+        } else {
+            ctx.fillRect(50, 100, this.superShotTimer, 50);
+            ctx.fillStyle = 'red';
+            ctx.fillText(`SUPER SHOT`, 80, 132);
+        }
+        ctx.strokeRect(50, 100, 200, 50);
     }
 }

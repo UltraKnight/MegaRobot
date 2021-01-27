@@ -1,13 +1,12 @@
-class Robot {
+class Boss {
     constructor() {
-        let enemyType = Math.floor(Math.random() * (4 - 1) + 1); //random from 1 to 3
+        let enemyType = 3;
         
-        this.x = Math.floor(Math.random() * (8500 - currentGame.player.x - 900) + currentGame.player.x + 900);
-        //this.x = canvas.width; // for testing
-        this.y = level.groundY;
-        this.health = enemyType + 4;
-        this.width = 180;
-        this.height = 190;
+        this.x = 1800;
+        this.y = 200;
+        this.health = 40;
+        this.width = 400;
+        this.height = 460;
         //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
         this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 478, 629);
         this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack/attack1.png`, 478, 411);
@@ -17,7 +16,7 @@ class Robot {
         this.animations = ['walking', 'attack1']; //used to change animation when its time - not implemented yet
         this.isEnemy = true;
         this.animating = false; //start animation from the beginning if it is set to false
-        this.speed = 3 + enemyType;
+        this.speed = 2;
         this.changeAnimationAfter = 0; //change animation after count to - not implemented yet
     }
 
@@ -41,13 +40,21 @@ class Robot {
             this.attack1Animation.animate(this.animating, this.lookingRight, this.x, this.y - 30, this.width + 50, this.height + 50, 4);
             
             this.animating = true;
+            //generate the bomb after the animation finishes
             if(this.attack1Animation.currentFrame === this.attack1Animation.totalFrames) {
                 this.animating = true;
+                
+                let randomX = Math.floor(Math.random() * (151 - 100) + 100); // 100 to 150
+                let randomDistance = Math.floor(Math.random() * (201 - 50) + 50); //value between 50 and 200
 
                 if(this.lookingRight) {
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, 6, true));
+                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, 6, true));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, 6, true));
+                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, 6, true));
                 } else {
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, -6, false));
+                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, -6, false));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, -6, false));
+                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, -6, false));
                 }
 
                 this.currentAnimation = 'walking';
@@ -58,7 +65,7 @@ class Robot {
     }
 
     move() {
-        if(this.changeAnimationAfter % 100 === 0) {
+        if(this.changeAnimationAfter % 80 === 0) {
             this.currentAnimation = this.animations[Math.floor(Math.random() * this.animations.length)];
             this.changeAnimationAfter = 0;
             this.animating = false;

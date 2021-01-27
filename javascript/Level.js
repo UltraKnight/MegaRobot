@@ -7,18 +7,25 @@ const level = {
     speed: 0,
     speedAcumulator: 0, //used to make other resources scroll with the level
     newEnemyTimer: 0,
+    bossSpawned: false,
     enemies: [],
     bombs: [],
     maxRobots: 20,
     remainingRobots: 20, //remaining to be spawned
     traps: [],
-    //trapsPos: [[3250, 500]],
-    trapsPos: [[300, 600]],
+    collectors: [],
+    collPos: [[3410, 500, 'hp', 247, 224], [4100, 500, 'super-shot', 247, 304]], //x, y, animation width, animation height
+    collectorsSrc: [
+        `./images/collectors/hp/hp-plus.png`,
+        `./images/collectors/super-shot/super-bonus.png`
+    ],
+    trapsPos: [[300, 600], [3335, 540]],
     trapsSrc: [
-        `./images/levels/traps/saw/saw.png`
+        `./images/levels/traps/saw/saw.png`,
+        `./images/levels/traps/saw/saw.png`,
     ],
     platforms: [],
-    platformsPos: [[500, 460], [700, 490], [1200, 570], [3000, 560], [3250, 550]],
+    platformsPos: [[500, 460], [700, 490], [1200, 570], [3270, 550], [4000, 560]],
     platformsSrc: [
         './images/platforms/tile_middle.png',
         './images/platforms/tile_middle.png',
@@ -68,7 +75,24 @@ const level = {
         //update traps
         for (let i = 0; i < this.traps.length; i++) {
             this.traps[i].draw();
+            if(this.traps[i].x < 1920 && this.traps[i].x > 0) {
+                if(sawSound.sound.currentTime > 1.98) {
+                    sawSound2.play();
+                }
+                if (sawSound.sound.paused) {
+                    sawSound.play();
+                }
+            }
             this.traps[i].hitPlayer();
+        }
+
+        //update collectors
+        for (let i = 0; i < this.collectors.length; i++) {
+            this.collectors[i].updateCollector();
+            if(this.collectors[i].hitPlayer()) {
+                this.collectors.splice(i, 1);
+                hpPlusSound.play();
+            }
         }
 
         //update enemies
@@ -78,12 +102,23 @@ const level = {
 
         if(this.remainingRobots > 0) {
             //create enemies
-            if(this.newEnemyTimer % 300 === 0) {
+            if(this.newEnemyTimer % 250 === 0) {
                 this.remainingRobots--;
                 this.newEnemyTimer = 0;
                 this.enemies.push(new Robot());
             }
             this.newEnemyTimer++;
+        }
+
+        //put the boss on the map
+        if(this.speedAcumulator >= 7000 && this.bossSpawned === false) {
+            this.bossSpawned = true;
+            this.enemies.push(new Boss());
+        }
+
+        if(this.bossSpawned) {
+            //play boss sound
+            bossLaugh.play();
         }
 
         //update bombs
