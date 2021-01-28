@@ -9,6 +9,7 @@ const level = {
     newEnemyTimer: 0,
     spawnTimer: 250,
     bossSpawned: false,
+    raining: false,
     enemies: [],
     bombs: [],
     maxRobots: 20,
@@ -53,6 +54,9 @@ const level = {
 
     drawFront() {
         this.drawBack(this.layers[1], 0);
+        if(this.raining) {
+            rain.makeRain();
+        }
     },
 
     move() {

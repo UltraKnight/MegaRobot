@@ -13,7 +13,7 @@ const goTo = (currentLevel) => {
                 './images/levels/level-2/level-2.png',
                 './images/levels/level-2/level-2-front.png'
             ];
-        
+            level.raining = true;
             level.bossSpawned = false;
             level.enemies = [];
             level.bombs = [];
