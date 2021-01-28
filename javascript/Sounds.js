@@ -30,3 +30,4 @@ let sawSound = new Sound('./sounds/effects/saw.mp3', false, 1);
 let sawSound2 = new Sound('./sounds/effects/saw2.mp3', false, 0.9);
 let hpPlusSound = new Sound('./sounds/effects/pickup.wav', false, 1);
 let bossLaugh = new Sound('./sounds/effects/boss-laugh.mp3', false, 1);
+let rainSound = new Sound('./sounds/background/rain.mp3', true, 1);

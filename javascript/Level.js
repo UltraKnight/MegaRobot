@@ -56,6 +56,9 @@ const level = {
         this.drawBack(this.layers[1], 0);
         if(this.raining) {
             rain.makeRain();
+            if(rainSound.sound.paused) {
+                rainSound.play();
+            }
         }
     },
 

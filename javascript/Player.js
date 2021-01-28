@@ -258,6 +258,7 @@ class Player {
             }
         }
 
+        //if is falling - the char is not on the ground (groundY)
         if(this.y < level.groundY && this.onPlatform === false) {
             this.onGround = false;
             if(this.jumping === false) {
@@ -267,6 +268,7 @@ class Player {
             this.onGround = true;
         }
 
+        //keep falling if in the air
         if (!this.onGround) {   
           gravitySpeed += gravity;
             this.y += gravitySpeed;
@@ -316,7 +318,8 @@ class Player {
         this.x += this.xVelocity;
         this.y += this.yVelocity;
 
-        if(this.sliding) {
+        //dash movement - moves the char or the screen depending on the char position inside the canvas
+        if(this.sliding && this.onGround) {
             //this.shooting = false;
             if(this.dashSpeed > 0) {
                 if(canMoveRight) {
@@ -337,8 +340,11 @@ class Player {
                     this.dashSpeed -= 8;
                 }
             } else if(this.dashSpeed === 0) {
-                this.idle();
+                //this.idle();
                 this.sliding = false;
+            } else {
+                this.sliding = false;
+                this.dashSpeed = 0;
             }
         }
         
@@ -460,12 +466,15 @@ class Player {
     }
 
     dash() {
-        if(this.sliding) {
+        if(this.sliding && this.onGround) { //doesn't dash if in the air
             this.animating = true;  //doesn't reset the animation if is still sliding
             if(this.slideAnimation.currentFrame === this.slideAnimation.totalFrames) {
                 this.animating = false;
                 this.sliding = false;
             }
+        } else {
+            this.animating = false;
+            this.sliding = false;
         }
 
         this.slideAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);

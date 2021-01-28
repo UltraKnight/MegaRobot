@@ -40,7 +40,9 @@ class Game {
         document.getElementById("main-menu").style.display = "none";
         document.getElementById("robot").style.display = "none";
         //request = requestAnimationFrame(loop);
-        backSound.play();
+        if(backSound.sound.paused) {
+            backSound.play();
+        }
         requestAnimationFrame(loop);
     }
     
