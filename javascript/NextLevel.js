@@ -31,7 +31,7 @@ const goTo = (currentLevel) => {
                 `./images/collectors/super-shot/super-bonus.png`,
                 `./images/collectors/rapid-s/rapid-s.png`
             ];
-            level.trapsPos = [[1000, 600], [3335, 540], [4300, 630], [6800, 630], [6900, 640]];
+            level.trapsPos = [[1000, 600], [3335, 540], [4300, 630], [6800, 630], [7200, 640]];
             level.trapsSrc = [
                 `./images/levels/traps/saw/saw.png`,
                 `./images/levels/traps/saw/saw.png`,
