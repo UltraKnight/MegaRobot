@@ -5,6 +5,7 @@ class Platform {
         this.width = 200;
         this.height = 100;
         this.imgSrc = source;
+        this.isEnemy = false;
     }
 
     left() { return this.x; }

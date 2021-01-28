@@ -1,3 +1,4 @@
+//death is managed in player move()
 class Robot {
     constructor() {
         let enemyType = Math.floor(Math.random() * (4 - 1) + 1); //random from 1 to 3
@@ -11,6 +12,7 @@ class Robot {
         //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
         this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 478, 629);
         this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack/attack1.png`, 478, 411);
+        this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death/death.png`, 320, 237);
         this.attacking = false;
         this.lookingRight = false; // enemies walk to left
         this.currentAnimation = 'walking'; //used in animation changing - not implemented yet
@@ -54,11 +56,20 @@ class Robot {
                 this.changeAnimationAfter = 1;
             }
             this.changeAnimationAfter = 1;
+        } else if (this.currentAnimation === 'dying') {
+            if (this.deathAnimation.currentFrame === this.deathAnimation.totalFrames) {
+                this.animating = false;
+            } else {
+                this.deathAnimation.animate(this.animating, this.lookingRight, 
+                    this.x, this.y, this.width, 
+                    this.height, 4);
+                this.animating = true;
+            }
         }
     }
 
     move() {
-        if(this.changeAnimationAfter % 100 === 0) {
+        if(this.changeAnimationAfter % 100 === 0 && this.currentAnimation !== 'dying') {
             this.currentAnimation = this.animations[Math.floor(Math.random() * this.animations.length)];
             this.changeAnimationAfter = 0;
             this.animating = false;
@@ -68,6 +79,8 @@ class Robot {
             this.x -= this.speed + levelLastSpeed;
         }
         else if(this.currentAnimation === 'attack1') {
+            this.x -= level.speed;
+        } else {
             this.x -= level.speed;
         }
 

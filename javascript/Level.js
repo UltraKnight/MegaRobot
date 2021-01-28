@@ -13,7 +13,8 @@ const level = {
     enemies: [],
     bombs: [],
     maxRobots: 20,
-    remainingRobots: 20, //remaining to be spawned
+    remainingRobots: 1, //remaining to be spawned
+    enemiesToRemove: [], //receives enemy index that must be removed from the array after death animation completes
     traps: [],
     collectors: [],
     collPos: [

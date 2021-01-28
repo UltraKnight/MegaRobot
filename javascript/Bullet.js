@@ -50,11 +50,19 @@ class Bullet {
                 level.enemies[i].receiveDmg(this.damageValue);
                 level.enemies[i].updateEnemy();
                 if(level.enemies[i].health <= 0) {
-                    level.enemies.splice(i, 1);
+                    level.enemies[i].currentAnimation = 'dying';
+                    level.enemiesToRemove.push(i); //must be removed after a while because the animation of dying
                 }
                 return colliding; //if colliding the bullet will be removed in the player move()
             }
         }
+        setTimeout(() => {
+            for (let i = 0; i < level.enemiesToRemove.length; i++) {
+                level.enemies.splice(level.enemiesToRemove[i], 1);
+                level.enemiesToRemove.splice(i, 1);
+
+            }
+        }, 3000);
     }
 
     updateBullet() {

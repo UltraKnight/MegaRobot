@@ -124,12 +124,12 @@ function loop() {
 
     request = requestAnimationFrame(loop);
 }
-cancelAnimationFrame(request);
 
 function dying() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     level.updateLevel();
     currentGame.player.die();
+    diedSound.play();
     if(currentGame.player.dieAnimation.currentFrame === currentGame.player.dieAnimation.totalFrames) {
         cancelAnimationFrame(request);
         this.animating = false;
@@ -175,7 +175,9 @@ function changeImageBack() {
 
 const changeAllEffects = e => {
     let sounds = [jumpSound, shootSound, superShotSound, 
-        saberSound, boomSound, sawSound, sawSound2, hpPlusSound, bossLaugh];
+        saberSound, boomSound, sawSound, sawSound2, hpPlusSound, bossLaugh,
+        rainSound, dashSound, diedSound];
+
     sessionStorage.setItem('volumeEffects', String(e.target.value));
     sounds.forEach(sound => {
         sound.sound.volume = e.target.value / 100;

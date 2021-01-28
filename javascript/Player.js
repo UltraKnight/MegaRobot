@@ -35,6 +35,7 @@ class Player {
 
         this.inCollision = false;
         this.inCollisionWithEnemy = false;
+        this.inCollisionWithPlatform = false;
         this.collidingTop = false;
         this.collidingLeft = false;
         this.collidingRight = false;
@@ -82,54 +83,20 @@ class Player {
             if(this.inCollision) {
                 if(this.inCollisionWithEnemy) {
                     this.inCollisionWithEnemy = false;
-                    this.receiveDmg(1);
-                    if(this.x > 100) {
-                        this.x -= 100;
+                    if (level.enemies[i].health > 0) { //avoid collision
+                        this.receiveDmg(1);
+                        if(this.x > 100) { 
+                            this.x -= 100;
+                        }
                     }
-                    break;
                 }
-
-                //this.inCollision = false;
-                // if(this.collidingTop) {
-                //     if (this.jumping) {
-                //         this.jumping = false;
-                //         this.melee = false;
-                //         this.shoot = false;
-                //         this.idle();
-                //     }
-                //     this.yVelocity = 0;
-                // }
-
-                // else {
-                //     this.onPlatform = false;
-                //     if(this.y < level.groundY) {
-                //         this.idle();
-                //     }
-                // }
-
-                // if(this.collidingRight || this.collidingLeft) {
-                //     if(this.sliding) {
-                //         this.sliding = false;
-                //         this.canSlide = false;
-                //         this.xVelocity = 0;
-                //         this.dashSpeed = 0;
-                //     }
-                // }
-
-                // if(this.collidingRight && this.xVelocity > 0) {
-                //     this.xVelocity = 0;
-                // }
-
-                // if(this.collidingLeft && this.xVelocity < 0) {
-                //     this.xVelocity = 0;
-                // }
             }
         }
 
         //platform collision
         for (let i = 0; i < level.platforms.length; i++) {
             this.collisionCheck(level.platforms[i]);
-            if(this.inCollision) {
+            if(this.inCollision && this.inCollisionWithPlatform) {
                 if(this.collidingTop) {
                     if (this.jumping) {
                         this.jumpHeight = 0;
@@ -214,10 +181,21 @@ class Player {
                     level.enemies[i].receiveDmg(this.meleeDamage);
                     level.enemies[i].updateEnemy();
                     if(level.enemies[i].health <= 0) {
-                        level.enemies.splice(i, 1);
-                     }
+                        level.enemies[i].currentAnimation = 'dying';
+                        //must be removed after a while because the animation of dying has to execute
+                        level.enemiesToRemove.push(i); //the array receives this enemy position to remove later
+                    }
                 }
             }
+
+            //remove the dead enemies after the dying animation is executed
+            setTimeout(() => {
+                for (let i = 0; i < level.enemiesToRemove.length; i++) {
+                    level.enemies.splice(level.enemiesToRemove[i], 1);
+                    level.enemiesToRemove.splice(i, 1);
+    
+                }
+            }, 3000);
         }
 
         //super shot
@@ -321,6 +299,10 @@ class Player {
         //dash movement - moves the char or the screen depending on the char position inside the canvas
         if(this.sliding && this.onGround) {
             //this.shooting = false;
+            if(dashSound.sound.paused) {
+                dashSound.play();
+            }
+
             if(this.dashSpeed > 0) {
                 if(canMoveRight) {
                     this.x += 8;
@@ -367,7 +349,7 @@ class Player {
     top() { return this.y + 10; }
     bottom() { return this.y + this.height - 8; }
 
-    collisionCheck(obstacle) { //attack range used when in battle
+    collisionCheck(obstacle) {
         let right = this.right();
         let left = this.left();
         let top = this.top();
@@ -387,8 +369,10 @@ class Player {
             this.inCollision = true;
             if(obstacle.isEnemy === true) {
                 this.inCollisionWithEnemy = true;
+                this.inCollisionWithPlatform = false;
             } else {
                 this.inCollisionWithEnemy = false;
+                this.inCollisionWithPlatform = true;
             }
             //check type of collision - top, left, right
             
