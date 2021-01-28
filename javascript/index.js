@@ -122,7 +122,7 @@ function loop(timestamp) {
             rainSound.sound.pause();
         }
 
-        if(currentGame.player.health === 0) {
+        if(currentGame.player.health < 0) {
             request = requestAnimationFrame(dying);
         } else {
             currentGame.gameOver();
