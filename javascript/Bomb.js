@@ -21,7 +21,7 @@ class Bomb {
     bottom() { return this.y + this.height - 5; }
 
     draw() {
-        if(this.goUp === 10) {
+        if(this.goUp === 10) { // === to play the sound just once
             boomSound.play();
         }
         if(this.goUp <= 10) {
@@ -33,12 +33,19 @@ class Bomb {
 
     move() {
         this.x += this.speed - level.speed;
-        if(this.goUp > 60) {
-            this.y -= 4;
+        // if(this.goUp > 60) {
+        //     this.y -= 4;
+        // } else if(this.goUp > 40) {
+        //     this.y -= 2;
+        // } else {
+        //     this.y += 3;
+        // }
+        if (this.goUp > 50) {
+            this.y -= 3;
         } else if(this.goUp > 40) {
             this.y -= 2;
         } else {
-            this.y += 3;
+            this.y += 3.5;
         }
 
         if(this.goUp > 0) {
@@ -59,7 +66,7 @@ class Bomb {
                 boomSound.play();
                 this.canDamage = false;
             }
-            if(currentGame.player.health <= 0) {
+            if(currentGame.player.health < 0) {
                 currentGame.hasEnded = true;
             }
             return colliding; //if colliding the bullet will be removed in the player move()

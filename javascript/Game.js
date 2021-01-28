@@ -45,7 +45,9 @@ class Game {
             backSound.play();
         }
         requestAnimationFrame(loop);
-        this.message('Megarobot! Help us to eliminate the unbridled robots that are trying to invade our facilities!');
+        if (currentLevel === 1) {
+            this.message('Megarobot! Help us to eliminate the unbridled robots that are trying to invade our facilities!');
+        }
     }
     
     showLife() {

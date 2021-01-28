@@ -271,16 +271,17 @@ class Player {
 
         //keep falling if in the air
         if (!this.onGround) {   
-          gravitySpeed += gravity;
+            gravitySpeed += gravity;
+            this.y += gravitySpeed;
             this.y += gravitySpeed;
         } else {
-            gravitySpeed = 0;
+            gravitySpeed = 2;
         }
 
         if(this.jumping && this.jumpHeight > 0) {
             //this.y -= 16;
-            this.y -= 14;
-            this.jumpHeight -= 14;
+            this.y -= 15;
+            this.jumpHeight -= 15;
             this.onPlatform = false;
         } else if(this.jumping && this.jumpHeight <= 0) {
             this.idle();
@@ -399,12 +400,12 @@ class Player {
             }
             //check type of collision - top, left, right
             
-            this.collidingBottom = this.bottom() - 20 < obstacle.y && this.top() < obstacle.top() && right + 20 > obstacle.left() && left - 20 < obstacle.right();
+            this.collidingBottom = this.bottom() - 25 < obstacle.y && this.top() < obstacle.top() && right + 20 > obstacle.left() && left - 20 < obstacle.right();
             //if(!this.collidingBottom) {
             this.collidingLeft = this.lookingRight === false && left <= obstacle.right() && right > obstacle.right() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
             this.collidingRight = this.lookingRight && right >= obstacle.left() && left < obstacle.left() && (!(this.bottom() <= obstacle.top() && top >= obstacle.bottom()));
             //this.collidingTop = top <= obstacle.bottom() && this.bottom() > obstacle.bottom() && right + 10 > obstacle.left() && left < obstacle.right();
-            this.collidingTop = top <= obstacle.bottom() && this.bottom() > obstacle.bottom() + 40 && right - 15 > obstacle.left() && left + 15 < obstacle.right(); //r -20 / l 25
+            this.collidingTop = top + 5 <= obstacle.bottom() && this.bottom() > obstacle.bottom() + 40 && right - 15 > obstacle.left() && left + 15 < obstacle.right(); //r -20 / l 25
             //}
             //this.collidingBottom = xMiddle >= obstacle.top() && xMiddle >= obstacle.top() && xMiddle <= obstacle.top() + obstacle.width;
             //this.collidingBottom = obstacle.top() <= x || obstacle.y > x && obstacle.top() + obstacle.width < x;

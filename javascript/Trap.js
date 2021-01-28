@@ -44,7 +44,7 @@ class Trap {
             boomSound.play();
             currentGame.player.receiveDmg(this.damageValue);
             currentGame.player.x -= 200;
-            if(currentGame.player.health <= 0) {
+            if(currentGame.player.health < 0) {
                 currentGame.hasEnded = true;
             }
             return colliding; //if colliding the bullet will be removed in the player move()

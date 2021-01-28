@@ -39,7 +39,9 @@ class Collector {
             this.canDamage = false;
             switch (this.type) {
                 case 'hp':
-                    currentGame.message('HP + 1');
+                    if (currentLevel === 1) {
+                        currentGame.message('HP + 1');
+                    }
                     ctx.beginPath();
                     ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
                     ctx.lineTo(80, canvas.height / 2 - 290);
@@ -53,7 +55,9 @@ class Collector {
                     currentGame.player.superShotTimer = 100;
 
                     currentGame.player.idle();
-                    currentGame.message('Your Super is faster, you\'ve got a new cannon.');
+                    if (currentLevel === 1) {
+                        currentGame.message('Your Super is faster, you\'ve got a new cannon.');
+                    }
                     ctx.beginPath();
                     ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
                     ctx.lineTo(100, canvas.height / 2 - 225);
@@ -77,9 +81,11 @@ class Collector {
                     // currentGame.player.shooting = false;
                     break;
                 case 'rapid-s':
-                    setTimeout(() => {
-                        currentGame.message('Shoot shoot shoot...');
-                    }, 800);
+                    if (currentLevel === 1) {
+                        setTimeout(() => {
+                            currentGame.message('Shoot shoot shoot...');
+                        }, 800);
+                    }
                     currentGame.player.shootCounter = 14;
                     break;
             }

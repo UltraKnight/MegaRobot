@@ -4,8 +4,8 @@ const ctx = canvas.getContext('2d');
 let currentGame = new Game();
 let currentLevel = 1;
 let request;
-let gravity = 0.67;
-let gravitySpeed = 0;
+let gravity = 0.4; //0.67
+let gravitySpeed = 0.8;
 let levelLastSpeed = 0;
 let dyingTimer;
 
@@ -25,7 +25,7 @@ function loop(timestamp) {
         if (currentGame.player.onGround) {
             if(! (currentGame.player.jumping || currentGame.player.sliding)) {
                 currentGame.player.jumping = true;
-                currentGame.player.jumpHeight = 350;
+                currentGame.player.jumpHeight = 360; //350
                 jumpSound.play();
             }
         }
