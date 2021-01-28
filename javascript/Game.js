@@ -83,6 +83,8 @@ class Game {
                 ctx.fillStyle = 'red';
                 ctx.fillText(`THAT'S IT! YOU BEATED THE GAME AND SAVED THE WORLD!`, 50, canvas.height / 2 - 20);
                 currentLevel = 1;
+                document.removeEventListener('keydown', controller.keyListener);
+                document.removeEventListener('keyup', controller.keyListener);
             }
             
         } else {
