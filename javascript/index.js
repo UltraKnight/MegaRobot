@@ -7,9 +7,15 @@ let request;
 let gravity = 0.67;
 let gravitySpeed = 0;
 let levelLastSpeed = 0;
+let dyingTimer;
+
 currentGame.player = new Player();
 
-function loop() {
+function loop(timestamp) {
+    if (dyingTimer === undefined) {
+        dyingTimer = timestamp;
+    }
+        
     if(controller.pause) {
         return;
     }
@@ -122,6 +128,19 @@ function loop() {
         return;
     }
 
+    //remove dead enemies after 3 seconds every 3 seconds :s
+    if (timestamp - dyingTimer >= 3000) {
+        //remove the dead enemies after the dying animation is executed
+        setTimeout(() => {
+            for (let i = 0; i < level.enemiesToRemove.length; i++) {
+                level.enemies.splice(level.enemiesToRemove[i], 1);
+                level.enemiesToRemove.splice(i, 1);
+
+            }
+        }, 3000);
+        dyingTimer = timestamp;
+    }
+
     request = requestAnimationFrame(loop);
 }
 
@@ -176,7 +195,7 @@ function changeImageBack() {
 const changeAllEffects = e => {
     let sounds = [jumpSound, shootSound, superShotSound, 
         saberSound, boomSound, sawSound, sawSound2, hpPlusSound, bossLaugh,
-        rainSound, dashSound, diedSound];
+        rainSound, dashSound, diedSound, bossDeathSound];
 
     sessionStorage.setItem('volumeEffects', String(e.target.value));
     sounds.forEach(sound => {

@@ -187,15 +187,6 @@ class Player {
                     }
                 }
             }
-
-            //remove the dead enemies after the dying animation is executed
-            setTimeout(() => {
-                for (let i = 0; i < level.enemiesToRemove.length; i++) {
-                    level.enemies.splice(level.enemiesToRemove[i], 1);
-                    level.enemiesToRemove.splice(i, 1);
-    
-                }
-            }, 3000);
         }
 
         //super shot

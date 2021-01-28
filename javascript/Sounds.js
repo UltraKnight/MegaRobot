@@ -33,3 +33,4 @@ let bossLaugh = new Sound('./sounds/effects/boss-laugh.mp3', false, 1);
 let rainSound = new Sound('./sounds/background/rain.mp3', true, 1);
 let dashSound = new Sound('./sounds/effects/dash.mp3', false, 1);
 let diedSound = new Sound('./sounds/effects/died.wav', false, 1);
+let bossDeathSound = new Sound('./sounds/effects/boss-dying.mp3', false, 1);

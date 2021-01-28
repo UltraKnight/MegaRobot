@@ -56,13 +56,6 @@ class Bullet {
                 return colliding; //if colliding the bullet will be removed in the player move()
             }
         }
-        setTimeout(() => {
-            for (let i = 0; i < level.enemiesToRemove.length; i++) {
-                level.enemies.splice(level.enemiesToRemove[i], 1);
-                level.enemiesToRemove.splice(i, 1);
-
-            }
-        }, 3000);
     }
 
     updateBullet() {
