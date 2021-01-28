@@ -171,7 +171,7 @@ window.onload = () => {
     document.getElementById('btn-play').onmouseout = () => { changeImageBack(); };
     document.getElementById('btn-play-again').onclick = () => { currentGame.startGame(); };
     document.getElementById('btn-finish').onclick = () => { currentGame.finishGame(); };
-    document.getElementById('volume-control').onclick = (e) => {
+    document.getElementById('volume-control').onchange = (e) => {
         backSound.sound.volume = e.target.value / 100;
      };
     document.getElementById('volume-effects').onchange = (e) => { changeAllEffects(e); };
