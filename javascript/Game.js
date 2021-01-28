@@ -45,6 +45,7 @@ class Game {
             backSound.play();
         }
         requestAnimationFrame(loop);
+        this.message('Megarobot! Help us to eliminate the unbridled robots that are trying to invade our facilities!');
     }
     
     showLife() {
@@ -102,7 +103,8 @@ class Game {
 
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.lineWidth = 1;
-        ctx.fillRect(canvas.width / 2 - 250, canvas.height / 2 - 280, 500, 200);
+        //ctx.fillRect(canvas.width / 2 - 250, canvas.height / 2 - 280, 500, 200);
+        ctx.fillRect(0, canvas.height / 2 - 280, canvas.width, 200);
         ctx.font = 'bold 20px sans-serif';
         ctx.fillStyle = 'gold';
         ctx.fillText(`${s}`, 

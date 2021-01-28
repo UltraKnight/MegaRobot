@@ -131,15 +131,15 @@ function loop(timestamp) {
     }
 
     //remove dead enemies after 3 seconds every 3 seconds :s
-    if (timestamp - dyingTimer >= 3000) {
+    if (timestamp - dyingTimer >= 4000) {
         //remove the dead enemies after the dying animation is executed
-        setTimeout(() => {
+
             for (let i = 0; i < level.enemiesToRemove.length; i++) {
-                level.enemies.splice(level.enemiesToRemove[i], 1);
+                //level.enemies.splice(level.enemiesToRemove[i], 1);
                 level.enemiesToRemove.splice(i, 1);
 
             }
-        }, 3000);
+  
         dyingTimer = timestamp;
     }
 

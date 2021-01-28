@@ -14,7 +14,7 @@ const level = {
     bombs: [],
     maxRobots: 20,
     remainingRobots: 20, //remaining to be spawned
-    enemiesToRemove: [], //receives enemy index that must be removed from the array after death animation completes
+    enemiesToRemove: [], //receives enemy that must be removed from the array after death animation completes
     traps: [],
     collectors: [],
     collPos: [
@@ -119,6 +119,11 @@ const level = {
         //update enemies
         for (let i = 0; i < this.enemies.length; i++) {
             this.enemies[i].updateEnemy();
+        }
+
+        //update dead enemies
+        for (let i = 0; i < this.enemiesToRemove.length; i++) {
+            this.enemiesToRemove[i].updateEnemy();   
         }
 
         if(this.remainingRobots > 0) {

@@ -77,7 +77,9 @@ class Collector {
                     // currentGame.player.shooting = false;
                     break;
                 case 'rapid-s':
-                    currentGame.message('Shoot shoot shoot...');
+                    setTimeout(() => {
+                        currentGame.message('Shoot shoot shoot...');
+                    }, 800);
                     currentGame.player.shootCounter = 14;
                     break;
             }

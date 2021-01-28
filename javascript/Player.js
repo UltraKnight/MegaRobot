@@ -183,7 +183,8 @@ class Player {
                     if(level.enemies[i].health <= 0) {
                         level.enemies[i].currentAnimation = 'dying';
                         //must be removed after a while because the animation of dying has to execute
-                        level.enemiesToRemove.push(i); //the array receives this enemy position to remove later
+                        level.enemiesToRemove.push(level.enemies[i]);
+                        level.enemies.splice(i, 1); //the array receives this enemy position to remove later
                     }
                 }
             }
@@ -221,10 +222,41 @@ class Player {
         //updating and removing out of sight bullets
         for(let i = 0; i < this.bullets.length; i++) {
             this.bullets[i].updateBullet();
+            for (let j = 0; j < level.enemies.length; j++) {
+                let goToNext = false;
+                //if(this.bullets[i].hitEnemy(level.enemies[j])) { //return true if enemy is alive
+                   if (this.bullets[i]) {
+                        if(this.bullets[i].x >= canvas.width || this.bullets[i].x < 0) {
+                            this.bullets.splice(i, 1);
+                            break;
+                        }
 
-            if(this.bullets[i].x > canvas.width || this.bullets[i] < 0 || this.bullets[i].hitEnemy()) {
-                this.bullets.splice(i, 1);
+                        let colliding = false;
+                        colliding = ! (this.bullets[i].bottom() < level.enemies[j].top() ||
+                            this.bullets[i].top() > level.enemies[j].bottom() ||
+                            this.bullets[i].right() < level.enemies[j].left() ||
+                            this.bullets[i].left() > level.enemies[j].right());
+
+                        if (colliding) {
+                            if (level.enemies[j].health > 0 && level.enemies[j].health > this.bullets[i].damageValue) {
+                                level.enemies[j].receiveDmg(this.bullets[i].damageValue);
+                                this.bullets.splice(i, 1);
+                            } else {
+                                level.enemies[j].currentAnimation = 'dying';
+                                level.enemiesToRemove.push(level.enemies[j]);
+                                level.enemies.splice(j, 1);
+                            }
+                        }
+                // }
+                         if(goToNext) break;
+                   }
+                    
             }
+            //this.bullets[i].updateBullet(i);
+
+            // if(this.bullets[i].x > canvas.width || this.bullets[i].x < 0 || this.bullets[i].hitEnemy()) {
+            //     this.bullets.splice(i, 1);
+            // }
         }
 
         //if is falling - the char is not on the ground (groundY)
