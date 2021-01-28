@@ -62,8 +62,8 @@ class Game {
         const btnPlay = document.getElementById('btn-play-again');
         btnPlay.disabled = false;
 
-        if(this.player.health >= 0) {
-            if (currentLevel < this.lastLevel) {
+        if(currentGame.player.health >= 0) {
+            if (currentLevel < currentGame.lastLevel) {
                 ctx.font = 'bold 90px serif';
                 ctx.fillStyle = 'red';
                 ctx.fillText(`CONGRATULATIONS!!! YOU SURVIVED!!!`, 50, canvas.height / 2 - 20);
