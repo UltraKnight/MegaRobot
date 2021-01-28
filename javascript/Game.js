@@ -62,7 +62,7 @@ class Game {
         const btnPlay = document.getElementById('btn-play-again');
         btnPlay.disabled = false;
 
-        if(this.player.health > 0) {
+        if(this.player.health >= 0) {
             if (currentLevel < this.lastLevel) {
                 ctx.font = 'bold 90px serif';
                 ctx.fillStyle = 'red';
