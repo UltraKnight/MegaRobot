@@ -20,7 +20,7 @@ class Sound {
     }
 }
 
-let backSound = new Sound('./sounds/background/Twin Musicom - Big Birds Date Night Full Version.mp3', true, 0.8);
+let backSound = new Sound('./sounds/background/backSound1.mp3', true, 0.8);
 let jumpSound = new Sound('./sounds/effects/jump.wav', false, 1);
 let shootSound = new Sound('./sounds/effects/shot.mp3', false, 0.9);
 let superShotSound = new Sound('./sounds/effects/super-shot.wav', false, 1);

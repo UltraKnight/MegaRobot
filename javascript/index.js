@@ -120,6 +120,10 @@ function loop(timestamp) {
     
     if(currentGame.hasEnded) {
         cancelAnimationFrame(request);
+        if (! rainSound.sound.paused) {
+            rainSound.sound.pause();
+        }
+
         if(currentGame.player.health === 0) {
             request = requestAnimationFrame(dying);
         } else {
