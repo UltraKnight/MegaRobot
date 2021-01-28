@@ -114,9 +114,7 @@ function loop(timestamp) {
         currentGame.player.idle();
     }
 
-    if (level.layers[1] !== '') {
-        level.drawFront();
-    }
+    level.drawFront();
     
     if(currentGame.hasEnded) {
         cancelAnimationFrame(request);

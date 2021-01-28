@@ -54,9 +54,14 @@ const level = {
     },
 
     drawFront() {
-        this.drawBack(this.layers[1], 0);
+        //draw front parte if there's one
+        if (this.layers.length > 1) {
+            this.drawBack(this.layers[1], 0);
+        }
+
         if(this.raining) {
             rain.makeRain();
+
             if(rainSound.sound.paused) {
                 rainSound.play();
             }

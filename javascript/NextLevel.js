@@ -10,8 +10,8 @@ const goTo = (currentLevel) => {
             break;
         case 2:
             level.layers = [
-                './images/levels/level-2/level-2.png',
-                './images/levels/level-2/level-2-front.png'
+                './images/levels/level-2/level-2.png'
+                //'./images/levels/level-2/level-2-front.png'
             ];
             level.raining = true;
             level.bossSpawned = false;
