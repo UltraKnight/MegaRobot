@@ -38,6 +38,11 @@ const controller = {
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
+          } else if(controller.pause) {
+            ctx.strokeStyle = 'silver';
+            ctx.lineWidth = 2;
+            ctx.font = 'bold 25px sans-serif';
+            ctx.strokeText('PAUSED', currentGame.player.x + 30, currentGame.player.y - 50);
           }
           break;
         case 'KeyJ':
