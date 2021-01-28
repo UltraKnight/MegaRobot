@@ -420,7 +420,7 @@ class Player {
         if(this.health > 0 && damageValue <= this.health) {
             this.health -= damageValue;
         } else if(currentGame.hasEnded === false) {
-            this.health = 0;
+            this.health = -1;
             currentGame.hasEnded = true;
         }
     }
