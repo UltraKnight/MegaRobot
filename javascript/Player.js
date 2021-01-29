@@ -80,14 +80,15 @@ class Player {
         for(let i = 0; i < level.enemies.length; i++) {
             this.collisionCheck(level.enemies[i]);
 
-            if(this.inCollision) {
-                if(this.inCollisionWithEnemy) {
-                    this.inCollisionWithEnemy = false;
-                    if (level.enemies[i].health > 0) { //avoid collision
-                        this.receiveDmg(1);
-                        if(this.x > 100) { 
-                            this.x -= 100;
-                        }
+            if(this.inCollision && this.inCollisionWithEnemy) {
+                this.inCollisionWithEnemy = false;
+                //avoid collision with dead enemies (enemies die with 0 life, player dies with less than 0)
+                if (level.enemies[i].health > 0) {
+                    this.receiveDmg(1);
+                    if(this.x > 100 && level.enemies[i].lookingRight) {
+                        level.enemies[i].x -= 100;
+                    } else if(this.x > 100 && level.enemies[i].lookingRight === false) {
+                        this.x -= 100;
                     }
                 }
             }
@@ -179,7 +180,8 @@ class Player {
                 }
                 if(takeHit) {
                     level.enemies[i].receiveDmg(this.meleeDamage);
-                    level.enemies[i].updateEnemy();
+                    //level.enemies[i].updateEnemy();
+                    //if their dead or out of the spawn area they'll be removed
                     if(level.enemies[i].health <= 0) {
                         level.enemies[i].currentAnimation = 'dying';
                         //must be removed after a while because the animation of dying has to execute

@@ -6,7 +6,7 @@ const level = {
     x: 0,
     speed: 0,
     speedAcumulator: 0, //used to make other resources scroll with the level
-    newEnemyTimer: 0,
+    newEnemyTimer: 1,
     spawnTimer: 250,
     bossSpawned: false,
     raining: false,
@@ -116,9 +116,15 @@ const level = {
             }
         }
 
-        //update enemies
+        //update enemies or remove them if they 'escaped' and are out of sight
         for (let i = 0; i < this.enemies.length; i++) {
-            this.enemies[i].updateEnemy();
+            if (this.enemies[i].x < -500 && this.enemies[i].lookingRight === false) {
+                this.enemies.splice(i, 1);
+            } else if(this.enemies[i].x > canvas.width + 1500 && this.enemies[i].lookingRight) {
+                this.enemies.splice(i, 1);
+            } else {
+                this.enemies[i].updateEnemy();
+            }
         }
 
         //update dead enemies
@@ -156,8 +162,10 @@ const level = {
         //update bombs
         for (let i = 0; i < level.bombs.length; i++) {
             level.bombs[i].updateBomb();
-            if(level.bombs[i].hitPlayer() || level.bombs[i].x > canvas.width || level.bombs[i].x < 0 ||
-             level.bombs[i].y > canvas.height) {
+            if(level.bombs[i].hitPlayer() || (level.bombs[i].x > canvas.width && level.bombs[i].leftOrRight === false) ||
+                    (level.bombs[i].x < 0 && level.bombs[i].leftOrRight) ||
+                    level.bombs[i].y > canvas.height) {
+                
                 level.bombs.splice(i, 1);
             }
         }

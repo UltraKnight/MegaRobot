@@ -2,11 +2,24 @@
 class Robot {
     constructor() {
         let enemyType = Math.floor(Math.random() * (4 - 1) + 1); //random from 1 to 3
-        
-        this.x = Math.floor(Math.random() * (8500 - currentGame.player.x - 900) + currentGame.player.x + 900);
+        let possiblePosition = [-100, canvas.width + 1000];
+        let definitivePositionIndex = 0;
+
+        definitivePositionIndex = Math.floor(Math.random() * possiblePosition.length); //0 or 1
+        this.x = possiblePosition[definitivePositionIndex];
+
+        if (this.x > 0) {
+            this.lookingRight = false; // enemies walk to left
+            this.speed = -(2 + enemyType);
+            this.health = enemyType + 2;
+        } else {
+            this.lookingRight = true; // enemies walk to right
+            this.speed = 2 + enemyType;
+            this.health = enemyType + 2;
+        }
+
         //this.x = canvas.width; // for testing
         this.y = level.groundY;
-        this.health = enemyType + 4;
         this.width = 180;
         this.height = 190;
         //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
@@ -14,13 +27,12 @@ class Robot {
         this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack/attack1.png`, 478, 411);
         this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death/death.png`, 320, 237);
         this.attacking = false;
-        this.lookingRight = false; // enemies walk to left
         this.currentAnimation = 'walking'; //used in animation changing - not implemented yet
         this.animations = ['walking', 'attack1']; //used to change animation when its time - not implemented yet
         this.isEnemy = true;
         this.animating = false; //start animation from the beginning if it is set to false
-        this.speed = 3 + enemyType;
         this.changeAnimationAfter = 0; //change animation after count to - not implemented yet
+        this.bombDamage = enemyType > 1 ? 2 : 1; //bomb damage based on enemy type
     }
 
     left() { return this.x + 50; }
@@ -47,9 +59,9 @@ class Robot {
                 this.animating = true;
 
                 if(this.lookingRight) {
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, 6, true));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, 10, true, this.bombDamage));
                 } else {
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, -6, false));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2, -10, false, this.bombDamage));
                 }
 
                 this.currentAnimation = 'walking';
@@ -76,7 +88,7 @@ class Robot {
         }
 
         if(this.currentAnimation === 'walking') {
-            this.x -= this.speed + levelLastSpeed;
+            this.x += this.speed - level.speed;
         }
         else if(this.currentAnimation === 'attack1') {
             this.x -= level.speed;

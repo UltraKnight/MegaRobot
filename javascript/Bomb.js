@@ -1,7 +1,7 @@
 class Bomb {
-    constructor(x, y, speed, rightOrLeft) {
+    constructor(x, y, speed, rightOrLeft, damageValue) {
         this.x = x;
-        this.speed = -10;
+        this.speed = speed;
         this.y = y;
         
         //this.animation = new ObjAnimation(5, `./images/player/bullet/bullet.png`, 170, 139);
@@ -9,18 +9,19 @@ class Bomb {
         this.exploding = new ObjAnimation(8, `./images/enemies/bomb-exploding/exploding.png`, 298, 298);
         this.width = 50;
         this.height = 50;
-        this.damageValue = 2;
+        this.damageValue = damageValue;
         this.goUp = 100;
-        this.rightOrLeft = rightOrLeft;
+        this.rightOrLeft = rightOrLeft;  //based on the enemy that is lauching it
         this.canDamage = true;
     }
 
-    left() { return this.x; }
+    left() { return this.x + 5; }
     right() { return this.x + this.width - 5; }
     top() { return this.y; }
     bottom() { return this.y + this.height - 5; }
 
     draw() {
+        currentGame.player.drawLines(this)
         if(this.goUp === 10) { // === to play the sound just once
             boomSound.play();
         }

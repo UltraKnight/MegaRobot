@@ -20,6 +20,7 @@ class Boss {
         this.speed = 2;
         this.hasDied = false; //used to his death cry
         this.changeAnimationAfter = 0; //change animation after count to - not implemented yet
+        this.bombDamage = enemyType > 1 ? 2 : 1;
     }
 
     left() { return this.x + 50; }
@@ -50,13 +51,13 @@ class Boss {
                 let randomDistance = Math.floor(Math.random() * (201 - 50) + 50); //value between 50 and 200
 
                 if(this.lookingRight) {
-                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, 6, true));
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, 6, true));
-                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, 6, true));
+                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, 6, true, this.bombDamage));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, 6, true, this.bombDamage));
+                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, 6, true, this.bombDamage));
                 } else {
-                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, -6, false));
-                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, -6, false));
-                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, -6, false));
+                    level.bombs.push(new Bomb(this.x - randomDistance,  this.y + this.height / 2 + randomX, -6, false, this.bombDamage));
+                    level.bombs.push(new Bomb(this.x,  this.y + this.height / 2 + randomX, -6, false, this.bombDamage));
+                    level.bombs.push(new Bomb(this.x + randomDistance,  this.y + this.height / 2 + randomX, -6, false, this.bombDamage));
                 }
 
                 this.currentAnimation = 'walking';
@@ -88,7 +89,7 @@ class Boss {
         }
 
         if(this.currentAnimation === 'walking') {
-            this.x -= this.speed + levelLastSpeed;
+            this.x -= this.speed + level.speed;
         }
         else if(this.currentAnimation === 'attack1') {
             this.x -= level.speed;
