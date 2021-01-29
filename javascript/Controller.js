@@ -20,6 +20,7 @@ const controller = {
         break;
       case 'KeyK':
       case 'Space':
+      case 'KeyW':
         controller.k = state;
         break;
       case 'KeyL':
