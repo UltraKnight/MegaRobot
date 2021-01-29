@@ -21,7 +21,6 @@ class Bomb {
     bottom() { return this.y + this.height - 5; }
 
     draw() {
-        currentGame.player.drawLines(this)
         if(this.goUp === 10) { // === to play the sound just once
             boomSound.play();
         }
