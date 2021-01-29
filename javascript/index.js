@@ -4,8 +4,8 @@ const ctx = canvas.getContext('2d');
 let currentGame = new Game();
 let currentLevel = 1;
 let request;
-let gravity = 0.4; //0.67
-let gravitySpeed = 0.8;
+let gravity = 0.38; //0.67
+let gravitySpeed = 0.7;
 let levelLastSpeed = 0;
 let dyingTimer;
 

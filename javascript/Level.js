@@ -27,7 +27,7 @@ const level = {
         `./images/collectors/super-shot/super-bonus.png`,
         `./images/collectors/rapid-s/rapid-s.png`
     ],
-    trapsPos: [[300, 600], [3335, 540], [6000, 630], [6500, 630]],
+    trapsPos: [[320, 605], [3335, 540], [6000, 630], [6500, 630]],
     trapsSrc: [
         `./images/levels/traps/saw/saw.png`,
         `./images/levels/traps/saw/saw.png`,
@@ -35,7 +35,7 @@ const level = {
         `./images/levels/traps/saw/saw.png`,
     ],
     platforms: [],
-    platformsPos: [[500, 460], [700, 490], [1200, 570], [3270, 550], [4000, 560]],
+    platformsPos: [[520, 460], [720, 490], [1220, 570], [3270, 550], [4000, 560]],
     platformsSrc: [
         './images/platforms/tile_middle.png',
         './images/platforms/tile_middle.png',

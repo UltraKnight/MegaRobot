@@ -37,6 +37,7 @@ class Collector {
 
         if(colliding && this.canDamage) {
             this.canDamage = false;
+            currentGame.player.idle();
             switch (this.type) {
                 case 'hp':
                     if (currentLevel === 1) {
@@ -54,7 +55,6 @@ class Collector {
                     currentGame.player.superCounter = 100;
                     currentGame.player.superShotTimer = 100;
 
-                    currentGame.player.idle();
                     if (currentLevel === 1) {
                         currentGame.message('Your Super is faster, you\'ve got a new cannon.');
                     }
