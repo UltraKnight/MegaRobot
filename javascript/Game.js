@@ -113,7 +113,7 @@ class Game {
         ctx.fillStyle = 'gold';
         ctx.fillText(`${s}`, 
          canvas.width / 2 - 240, canvas.height / 2 - 250);
-        ctx.fillText('Press SPACE to continue.',
+        ctx.fillText('Press ESC or F to continue.',
          canvas.width / 2 - 240, canvas.height / 2 - 250 + 30);
     }
 

@@ -19,7 +19,7 @@ const controller = {
         controller.j = state;
         break;
       case 'KeyK':
-      case 'KeyW':
+      case 'Space':
         controller.k = state;
         break;
       case 'KeyL':
@@ -34,7 +34,7 @@ const controller = {
       currentGame.player.animating = false; //reset next player animation
       switch(e.code) {
         case 'Escape':
-        case 'Space':
+        case 'KeyF':
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
