@@ -41,12 +41,14 @@ class Collector {
             switch (this.type) {
                 case 'hp':
                     if (currentLevel === 1) {
-                        currentGame.message('HP + 1');
+                        setTimeout(() => {
+                            currentGame.message('HP + 1');
+                            ctx.beginPath();
+                            ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
+                            ctx.lineTo(80, canvas.height / 2 - 290);
+                            ctx.stroke();
+                        }, 800);
                     }
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
-                    ctx.lineTo(80, canvas.height / 2 - 290);
-                    ctx.stroke();
 
                     currentGame.player.health++;
                     break;
@@ -56,12 +58,14 @@ class Collector {
                     currentGame.player.superShotTimer = 100;
 
                     if (currentLevel === 1) {
-                        currentGame.message('Your Super is faster, you\'ve got a new cannon.');
+                        setTimeout(() => {
+                            currentGame.message('Your Super is faster, you\'ve got a new cannon.');
+                            ctx.beginPath();
+                            ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
+                            ctx.lineTo(100, canvas.height / 2 - 225);
+                            ctx.stroke();
+                        }, 800);
                     }
-                    ctx.beginPath();
-                    ctx.moveTo(canvas.width / 2 - 250, canvas.height / 2 - 225);
-                    ctx.lineTo(100, canvas.height / 2 - 225);
-                    ctx.stroke();
 
                     //NEW CANNON
                     currentGame.player.dieAnimation = new ObjAnimation(10, './images/player/super/die_10_562-519.png', 562, 519);
