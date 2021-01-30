@@ -124,6 +124,7 @@ function loop(timestamp) {
 
         if(currentGame.player.health < 0) {
             request = requestAnimationFrame(dying);
+            return;
         } else {
             currentGame.gameOver();
             return; //avoid entering in gameOver() twice
