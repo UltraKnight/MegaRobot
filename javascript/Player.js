@@ -519,6 +519,17 @@ class Player {
         this.animating = false;
     }
 
+    //always draw a static image of the main char in situations where the image sources will change
+    drawStatic() {
+        let image = new Image();
+        image.src = `./images/player/static.png`;
+        let x = this.x;
+        let y = this.y;
+        let w = this.width;
+        let h = this.height;
+        ctx.drawImage(image, x, y, w, h);
+    }
+
     updateSuperShot() {
         ctx.strokeStyle = 'red';
         ctx.lineWidth = 4;

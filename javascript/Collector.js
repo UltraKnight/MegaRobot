@@ -67,7 +67,7 @@ class Collector {
                     }
                     //NEW CANNON
                     //call this player animation to try to prevent the player from blinking while changing the image sources
-                    currentGame.player.idle();
+                    currentGame.player.drawStatic();
                     currentGame.player.dieAnimation = new ObjAnimation(10, './images/player/super/die_10_562-519.png', 562, 519);
                     currentGame.player.idleAnimation = new ObjAnimation(10, './images/player/super/idle_10_567-556.png');
                     currentGame.player.jumpAnimation = new ObjAnimation(10, './images/player/super/jump_10_567-556.png');
