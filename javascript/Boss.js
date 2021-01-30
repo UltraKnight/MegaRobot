@@ -4,7 +4,7 @@ class Boss {
         
         this.x = 1800; // its correct, its the level x axis that must be changed
         this.y = 200;
-        this.health = 40;
+        this.health = 60;
         this.width = 400;
         this.height = 460;
         //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);

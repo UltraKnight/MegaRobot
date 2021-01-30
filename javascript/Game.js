@@ -12,11 +12,7 @@ class Game {
             sessionStorage.setItem("reloading", "true");
             request = null;
             window.location.href = window.location.href;
-        }
-
-        if(currentLevel > 1) {
-            goTo(currentLevel);
-            this.hasEnded = false;
+            return;
         }
 
         cancelAnimationFrame(request);
@@ -77,14 +73,15 @@ class Game {
                 
                 document.removeEventListener('keydown', controller.keyListener);
                 document.removeEventListener('keyup', controller.keyListener);
-                if(! sessionStorage.getItem("nextLevel")) {
+                //if(! sessionStorage.getItem("nextLevel")) {
                     sessionStorage.setItem("nextLevel", String(currentLevel));
-                }
+                //}
             } else {
                 ctx.font = 'bold 60px serif';
                 ctx.fillStyle = 'red';
                 ctx.fillText(`THAT'S IT! YOU BEATED THE GAME AND SAVED THE WORLD!`, 50, canvas.height / 2 - 20);
                 currentLevel = 1;
+                sessionStorage.setItem("nextLevel", "1");
                 document.removeEventListener('keydown', controller.keyListener);
                 document.removeEventListener('keyup', controller.keyListener);
             }
@@ -95,10 +92,10 @@ class Game {
             ctx.fillStyle = 'red';
             ctx.fillText(`YOU DIED`, canvas.width / 2 - 300, canvas.height / 2 - 20);
 
-            currentLevel = 1;
-            if(sessionStorage.getItem("nextLevel")) {
-                sessionStorage.removeItem("nextLevel");
-            }
+            // currentLevel = 1;
+            // if(sessionStorage.getItem("nextLevel")) {
+            //     sessionStorage.removeItem("nextLevel");
+            // }
         }
     }
 
@@ -119,6 +116,11 @@ class Game {
 
     finishGame() {
         //cancelAnimationFrame(request);
-        window.location.href = window.location.href;
+        if (confirm('If you quit you will lose your progress, ok?')) {
+            if(sessionStorage.getItem("nextLevel")) {
+                sessionStorage.removeItem("nextLevel");
+            }
+            window.location.href = window.location.href;
+          }
     }
 }

@@ -20,14 +20,16 @@ const level = {
     collPos: [
         [3410, 500, 'hp', 247, 224, 2],
         [4100, 500, 'super-shot', 247, 304, 2],
-        [6000, 600, 'rapid-s', 300, 300, 6]
+        [6000, 600, 'rapid-s', 300, 300, 6],
+        [7000, 700, 'blue-shot', 300, 300, 6]
     ], //x, y, animation width, animation height
     collectorsSrc: [
         `./images/collectors/hp/hp-plus.png`,
         `./images/collectors/super-shot/super-bonus.png`,
-        `./images/collectors/rapid-s/rapid-s.png`
+        `./images/collectors/rapid-s/rapid-s.png`,
+        `./images/collectors/blue-shot/blue-shot.png`
     ],
-    trapsPos: [[320, 605], [3335, 540], [6000, 630], [6500, 630]],
+    trapsPos: [[320, 610], [3335, 545], [6000, 630], [6500, 630]],
     trapsSrc: [
         `./images/levels/traps/saw/saw.png`,
         `./images/levels/traps/saw/saw.png`,

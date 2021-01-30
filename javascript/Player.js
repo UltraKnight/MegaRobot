@@ -12,6 +12,7 @@ class Player {
         this.meleeDamage = 2;
         this.bullets = [];
         this.superShot = false;
+        this.hasBlueShot = false;
 
         this.imgSource = './images/player/idle_10_567-556.png';
         this.jumping = false;
@@ -203,13 +204,13 @@ class Player {
             this.updateSuperShot();
             if(this.superShot === true) {
                 superShotSound.play();
-                this.bullets.push(new Bullet(true)); //true stands for super bullet
+                this.bullets.push(new Bullet(true, this.hasBlueShot)); //true stands for super bullet
                 this.superShot = false;
             }
 
             if(this.newBulletTimer % this.shootCounter === 0) {
                 shootSound.play();
-                this.bullets.push(new Bullet());
+                this.bullets.push(new Bullet(false, this.hasBlueShot));
                 this.newBulletTimer = 0;
             }
             this.newBulletTimer++;

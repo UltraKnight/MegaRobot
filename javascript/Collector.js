@@ -37,7 +37,6 @@ class Collector {
 
         if(colliding && this.canDamage) {
             this.canDamage = false;
-            currentGame.player.idle();
             switch (this.type) {
                 case 'hp':
                     if (currentLevel === 1) {
@@ -70,6 +69,9 @@ class Collector {
                     //NEW CANNON
                     currentGame.player.dieAnimation = new ObjAnimation(10, './images/player/super/die_10_562-519.png', 562, 519);
                     currentGame.player.idleAnimation = new ObjAnimation(10, './images/player/super/idle_10_567-556.png');
+                    
+                    currentGame.player.idle(); //call the player animation because the images were changed
+
                     currentGame.player.jumpAnimation = new ObjAnimation(10, './images/player/super/jump_10_567-556.png');
                     currentGame.player.jumpMeleeAnimation = new ObjAnimation(8, './images/player/super/jumpmelee_8_567-556.png');
                     currentGame.player.jumpShootAnimation = new ObjAnimation(5, './images/player/super/jumpshoot_5_567-556.png');
@@ -78,7 +80,7 @@ class Collector {
                     currentGame.player.runShootAnimation = new ObjAnimation(9, './images/player/super/runshoot_9_567-556.png');
                     currentGame.player.shootAnimation = new ObjAnimation(4, './images/player/super/shoot_4_567-556.png');
                     currentGame.player.slideAnimation = new ObjAnimation(8, './images/player/super/slide_10_567-556.png');
-
+                    
                     //if you dont understand what you have collected after that, then....
                     // currentGame.player.shooting = true;
                     // currentGame.player.move();
@@ -91,6 +93,14 @@ class Collector {
                         }, 800);
                     }
                     currentGame.player.shootCounter = 14;
+                    break;
+                case 'blue-shot':
+                    if (currentLevel === 1) {
+                        setTimeout(() => {
+                            currentGame.message('Now the damage of your shots are doubled');
+                        }, 800);
+                    }
+                    currentGame.player.hasBlueShot = true;
                     break;
             }
             return colliding; //if colliding the bullet will be removed in the player move()

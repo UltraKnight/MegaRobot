@@ -126,8 +126,8 @@ function loop(timestamp) {
             request = requestAnimationFrame(dying);
         } else {
             currentGame.gameOver();
+            return; //avoid entering in gameOver() twice
         }
-        return;
     }
 
     //remove dead enemies after 3 seconds every 3 seconds :s
@@ -180,8 +180,13 @@ window.onload = () => {
         sessionStorage.removeItem("reloading");
         if(nextLevel) {
             currentLevel = parseInt(nextLevel);
-            sessionStorage.removeItem("nextLevel");
+            //sessionStorage.removeItem("nextLevel");
         }
+
+        if(currentLevel > 1) {
+            goTo(currentLevel);
+        }
+
         currentGame.startGame();
     }
 };

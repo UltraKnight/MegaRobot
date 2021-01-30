@@ -24,12 +24,14 @@ const goTo = (currentLevel) => {
             level.collPos = [
                 [3000, 500, 'hp', 247, 224, 2],
                 [3600, 500, 'super-shot', 247, 304, 2],
-                [6280, 600, 'rapid-s', 300, 300, 6]
+                [6280, 600, 'rapid-s', 300, 300, 6],
+                [6900, 500, 'blue-shot', 300, 300, 6]
             ]; //x, y, animation width, animation height
             level.collectorsSrc = [
                 `./images/collectors/hp/hp-plus.png`,
                 `./images/collectors/super-shot/super-bonus.png`,
-                `./images/collectors/rapid-s/rapid-s.png`
+                `./images/collectors/rapid-s/rapid-s.png`,
+                `./images/collectors/blue-shot/blue-shot.png`
             ];
             level.trapsPos = [[1000, 600], [3335, 540], [4300, 630], [6800, 630], [7200, 640]];
             level.trapsSrc = [

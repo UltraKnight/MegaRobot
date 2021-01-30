@@ -1,5 +1,5 @@
 class Bullet {
-    constructor(superBullet = false) {
+    constructor(superBullet = false, blueShot = false) {
         if(currentGame.player.lookingRight) {
             this.x = currentGame.player.right();
             this.speed = 15;
@@ -12,7 +12,8 @@ class Bullet {
 
         this.y = currentGame.player.y + currentGame.player.height / 2;
         
-        this.animation = new ObjAnimation(5, `./images/player/bullet/bullet.png`, 170, 139);
+        this.animation = blueShot ? new ObjAnimation(5, `./images/player/bullet/blue-shot.png`, 170, 139) :
+            new ObjAnimation(5, `./images/player/bullet/bullet.png`, 170, 139);
         if(superBullet) {
             this.width = 80;
             this.height = 60;
@@ -21,7 +22,7 @@ class Bullet {
         } else {
             this.width = 30;
             this.height = 20;
-            this.damageValue = 1;
+            this.damageValue = blueShot ? 2 : 1;
         }
     }
 
