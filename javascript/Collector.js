@@ -65,13 +65,11 @@ class Collector {
                             ctx.stroke();
                         }, 800);
                     }
-
                     //NEW CANNON
+                    //call this player animation to try to prevent the player from blinking while changing the image sources
+                    currentGame.player.idle();
                     currentGame.player.dieAnimation = new ObjAnimation(10, './images/player/super/die_10_562-519.png', 562, 519);
                     currentGame.player.idleAnimation = new ObjAnimation(10, './images/player/super/idle_10_567-556.png');
-                    
-                    currentGame.player.idle(); //call the player animation because the images were changed
-
                     currentGame.player.jumpAnimation = new ObjAnimation(10, './images/player/super/jump_10_567-556.png');
                     currentGame.player.jumpMeleeAnimation = new ObjAnimation(8, './images/player/super/jumpmelee_8_567-556.png');
                     currentGame.player.jumpShootAnimation = new ObjAnimation(5, './images/player/super/jumpshoot_5_567-556.png');
@@ -80,7 +78,7 @@ class Collector {
                     currentGame.player.runShootAnimation = new ObjAnimation(9, './images/player/super/runshoot_9_567-556.png');
                     currentGame.player.shootAnimation = new ObjAnimation(4, './images/player/super/shoot_4_567-556.png');
                     currentGame.player.slideAnimation = new ObjAnimation(8, './images/player/super/slide_10_567-556.png');
-                    
+
                     //if you dont understand what you have collected after that, then....
                     // currentGame.player.shooting = true;
                     // currentGame.player.move();
