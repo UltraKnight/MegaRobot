@@ -177,6 +177,11 @@ window.onload = () => {
      };
     document.getElementById('volume-effects').onchange = (e) => { changeAllEffects(e); };
 
+    //activate the start button after page is fully loaded
+    let btnPlay = document.getElementById('btn-play');
+    btnPlay.innerHTML = 'START GAME';
+    btnPlay.disabled = false;
+
     if (reloading) {
         sessionStorage.removeItem("reloading");
         if(nextLevel) {

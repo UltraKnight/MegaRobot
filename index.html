@@ -74,13 +74,17 @@
         </div>
     </div>
     <div id='main-menu'>
-        <button id="btn-play">START GAME</button>
+        <button id="btn-play" disabled>START GAME</button>
         <img src="./images/cover.png" alt="megarobot image" id="robot">
     </div>
     <div id="div-canvas">
         <canvas id="game-stage" width="1920" height="700"></canvas>
     </div>
-
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById('btn-play').innerHTML = 'CARREGANDO...';
+        });
+    </script>
     <script src="./javascript/Level.js"></script>
     <script src="./javascript/NextLevel.js"></script>
     <script src="./javascript/Player.js"></script>
