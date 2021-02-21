@@ -165,6 +165,13 @@ window.onload = () => {
     let reloading = sessionStorage.getItem("reloading");
     let nextLevel = sessionStorage.getItem("nextLevel");
 
+    const updateCopyright = () => {
+        const currentYear = new Date().getFullYear();
+        document.getElementById('currentYear').innerHTML = currentYear;
+    };
+    
+    updateCopyright();
+
     document.addEventListener('keydown', controller.keyListener);
     document.addEventListener('keyup', controller.keyListener);
     document.getElementById('btn-play').onclick = () => { currentGame.startGame(); };

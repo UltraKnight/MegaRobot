@@ -68,6 +68,23 @@ button:enabled:hover {
     background: linear-gradient(to bottom, yellow, orange 30%, gold);
 }
 
+.copyright {
+    position: fixed;
+    transform: translateX(-50%);
+    bottom: 3px;
+    padding: 0 5px;
+    left: 50%;
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    margin: 0 auto;
+}
+
+.copyright span {
+    font-size: 0.9rem;
+}
+
 #div-canvas {
     display: block;
     width: 99vw;
