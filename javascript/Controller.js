@@ -7,7 +7,7 @@ const controller = {
   s: false,
   pause: false,
   keyListener(e) {
-    let state = (e.type === 'keydown') ? true : false;
+    let state = e.type === 'keydown' ? true : false;
     switch (e.code) {
       case 'KeyA':
         controller.left = state;
@@ -31,15 +31,15 @@ const controller = {
         break;
     }
 
-    if(e.type === 'keyup') {
+    if (e.type === 'keyup') {
       currentGame.player.animating = false; //reset next player animation
-      switch(e.code) {
+      switch (e.code) {
         case 'Escape':
         case 'KeyF':
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
-          } else if(controller.pause) {
+          } else if (controller.pause) {
             ctx.strokeStyle = 'silver';
             ctx.lineWidth = 2;
             ctx.font = 'bold 25px sans-serif';
@@ -50,7 +50,7 @@ const controller = {
           currentGame.player.shooting = false;
           break;
         case 'KeyL':
-            currentGame.player.canMelee = true;
+          currentGame.player.canMelee = true;
           break;
         case 'KeyS':
           currentGame.player.canSlide = true;
@@ -60,5 +60,5 @@ const controller = {
   },
   updateController() {
     return;
-  }
+  },
 };

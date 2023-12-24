@@ -1,23 +1,23 @@
 class Sound {
-    constructor(src, loop, volume) {
-        this.sound = document.createElement("audio");
-        this.sound.src = src;
-        this.sound.setAttribute("preload", "auto");
-        this.sound.setAttribute("controls", "none");
-        this.sound.style.display = "none";
-        this.sound.loop = loop;
-        this.sound.volume = volume;
+  constructor(src, loop, volume) {
+    this.sound = document.createElement('audio');
+    this.sound.src = src;
+    this.sound.setAttribute('preload', 'auto');
+    this.sound.setAttribute('controls', 'none');
+    this.sound.style.display = 'none';
+    this.sound.loop = loop;
+    this.sound.volume = volume;
 
-        document.body.appendChild(this.sound);
+    document.body.appendChild(this.sound);
 
-        this.play = function () {
-            this.sound.play();
-        };
+    this.play = function () {
+      this.sound.play();
+    };
 
-        this.stop = function () {
-            this.sound.pause();
-        };
-    }
+    this.stop = function () {
+      this.sound.pause();
+    };
+  }
 }
 
 let backSound = new Sound('./sounds/background/backSound1.mp3', true, 0.8);

@@ -1,99 +1,107 @@
 <!DOCTYPE html>
 <html lang="en" prefix="og: http://ogp.me/ns#">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
     <!-- <meta http-equiv="Cache-control" content="public, max-age=2592000"> -->
-    <meta property='og:title' content='Megarobot' />
-    <meta name='image' property='og:image' content='https://res.cloudinary.com/ultraknight/image/upload/v1618346017/megarobot/megarobot-screenshot_pddyjb.png' />
-    <meta name='author' content='Vanderlei Ignacio Martins'>
-    <meta property='og:description' content="Megarobot - protect your facilities, kill the invading robots and save the world once more. Enjoy this platform shooter adventure and face the boss... if you can." />
-    <meta property='og:url' content='https://megarobot.netlify.app/' />
+    <meta
+      name="image"
+      property="og:image"
+      content="https://res.cloudinary.com/ultraknight/image/upload/v1618346017/megarobot/megarobot-screenshot_pddyjb.png"
+    />
+    <meta name="author" content="Vanderlei Ignacio Martins" />
+
+    <meta property="og:title" content="Megarobot" />
+    <meta
+      property="og:description"
+      content="Megarobot - protect your facilities, kill the invading robots and save the world once more. Enjoy this platform shooter adventure and face the boss... if you can."
+    />
+    <meta property="og:url" content="https://megarobot.netlify.app/" />
 
     <title>Mega Robot</title>
 
-    <link rel="shortcut icon" type="image/png" href="./images/favicon/icon.png"/>
+    <link rel="shortcut icon" type="image/png" href="./images/favicon/icon.png" />
 
-    <link rel="stylesheet" href="./styles/styles.css">
-    <link rel="preload" href="./images/levels/level-1/level-1.png" as="image">
-    <link rel="preload" href="./images/levels/level-1/level-1-front.png" as="image">
-    <link rel="preload" href="./images/platforms/tile_middle.png" as="image">
+    <link rel="stylesheet" href="./styles/styles.css" />
+    <link rel="preload" href="./images/levels/level-1/level-1.png" as="image" />
+    <link rel="preload" href="./images/levels/level-1/level-1-front.png" as="image" />
+    <link rel="preload" href="./images/platforms/tile_middle.png" as="image" />
 
-    <link rel="preload" href="./images/player/run_8_567-556.png" as="image">
-    <link rel="preload" href="./images/player/idle_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/jump_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/shoot_4_567-556.png" as="image">
-    <link rel="preload" href="./images/player/slide_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/jumpmelee_8_567-556.png" as="image">
-    <link rel="preload" href="./images/player/jumpshoot_5_567-556.png" as="image">
-    <link rel="preload" href="./images/player/runshoot_9_567-556.png" as="image">
-    <link rel="preload" href="./images/player/melee_8_567-556.png" as="image">
+    <link rel="preload" href="./images/player/run_8_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/idle_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/jump_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/shoot_4_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/slide_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/jumpmelee_8_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/jumpshoot_5_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/runshoot_9_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/melee_8_567-556.png" as="image" />
 
-    <link rel="preload" href="./images/player/super/run_8_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/idle_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/jump_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/shoot_4_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/slide_10_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/jumpmelee_8_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/jumpshoot_5_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/runshoot_9_567-556.png" as="image">
-    <link rel="preload" href="./images/player/super/melee_8_567-556.png" as="image">
-        
-    <link rel="preload" href="./images/enemies/Robot01/walk/walk.png" as="image">
-    <link rel="preload" href="./images/enemies/Robot02/walk/walk.png" as="image">
-    <link rel="preload" href="./images/enemies/Robot03/walk/walk.png" as="image">
-    <link rel="preload" href="./images/player/bullet/bullet.png" as="image">
-    <link rel="preload" href="./images/enemies/bomb/bomb.png" as="image">
-    <link rel="preload" href="./images/levels/level-2/level-2.png" as="image">
+    <link rel="preload" href="./images/player/super/run_8_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/idle_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/jump_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/shoot_4_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/slide_10_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/jumpmelee_8_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/jumpshoot_5_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/runshoot_9_567-556.png" as="image" />
+    <link rel="preload" href="./images/player/super/melee_8_567-556.png" as="image" />
 
-
-</head>
-<body>
-    <div class='main'>
-        <div class='top'>
-            <h1>Controls</h1>
-            <p>A/D = MOVEMENT</p>
-            <span>|</span>
-            <p>S = DASH</p>
-            <span>|</span>
-            <P>K/W or Space = JUMP</P>
-            <span>|</span>
-            <p>J (hold) = SHOOT</p>
-            <span>|</span>
-            <p>L = MELEE</p>
-            <span>|</span>
-            <p>ESC or F = PAUSE</p>
+    <link rel="preload" href="./images/enemies/Robot01/walk/walk.png" as="image" />
+    <link rel="preload" href="./images/enemies/Robot02/walk/walk.png" as="image" />
+    <link rel="preload" href="./images/enemies/Robot03/walk/walk.png" as="image" />
+    <link rel="preload" href="./images/player/bullet/bullet.png" as="image" />
+    <link rel="preload" href="./images/enemies/bomb/bomb.png" as="image" />
+    <link rel="preload" href="./images/levels/level-2/level-2.png" as="image" />
+  </head>
+  <body>
+    <div class="main">
+      <div class="top">
+        <h1>Controls</h1>
+        <p>A/D = MOVEMENT</p>
+        <span>|</span>
+        <p>S = DASH</p>
+        <span>|</span>
+        <p>K/W or Space = JUMP</p>
+        <span>|</span>
+        <p>J (hold) = SHOOT</p>
+        <span>|</span>
+        <p>L = MELEE</p>
+        <span>|</span>
+        <p>ESC or F = PAUSE</p>
+      </div>
+      <div class="bottom">
+        <div class="buttons">
+          <button id="btn-play-again" disabled>PLAY AGAIN</button>
+          <button id="btn-finish">QUIT</button
+          ><!-- when clicked you lost all progress because it doesn't work with the sessionSyotage -->
         </div>
-        <div class='bottom'>
-            <div class="buttons">
-                <button id="btn-play-again" disabled>PLAY AGAIN</button>
-                <button id="btn-finish">QUIT</button><!-- when clicked you lost all progress because it doesn't work with the sessionSyotage -->
-            </div>
-            <div class="bars">
-                <label for="volume-control">Music</label>
-                <input type="range" min="0" max="100" value="80" class="slider" id="volume-control">
-                <label for="volume-effects">Effects</label>
-                <input type="range" min="0" max="100" value="100" class="slider" id="volume-effects">
-            </div>
+        <div class="bars">
+          <label for="volume-control">Music</label>
+          <input type="range" min="0" max="100" value="80" class="slider" id="volume-control" />
+          <label for="volume-effects">Effects</label>
+          <input type="range" min="0" max="100" value="100" class="slider" id="volume-effects" />
         </div>
+      </div>
     </div>
-    <div id='main-menu'>
-        <button id="btn-play" disabled>START GAME</button>
-        <img src="./images/cover.png" alt="megarobot image" id="robot">
+    <div id="main-menu">
+      <button id="btn-play" disabled>START GAME</button>
+      <img src="./images/cover.png" alt="megarobot image" id="robot" />
     </div>
     <div id="div-canvas">
-        <canvas id="game-stage" width="1920" height="700"></canvas>
+      <canvas id="game-stage" width="1920" height="700"></canvas>
     </div>
-    
-    <div class="copyright">&copy; <span id="currentYear">2021</span> Copyright:
-        <span>Vanderlei I. Martins</span>
+
+    <div class="copyright">
+      &copy; <span id="currentYear">2021</span> Copyright:
+      <span>Vanderlei I. Martins</span>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('btn-play').innerHTML = 'CARREGANDO...';
-        });
+      document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('btn-play').innerHTML = 'Loading...';
+      });
     </script>
     <script src="./javascript/Level.js"></script>
     <script src="./javascript/NextLevel.js"></script>
@@ -111,5 +119,5 @@
     <script src="./javascript/Sounds.js"></script>
     <script src="./javascript/index.js"></script>
     <script src="./javascript/Rain.js"></script>
-</body>
+  </body>
 </html>
