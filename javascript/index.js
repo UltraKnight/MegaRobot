@@ -2,9 +2,10 @@ const canvas = document.getElementById('game-stage');
 const ctx = canvas.getContext('2d');
 
 let currentGame = new Game();
-let currentLevel = 1;
+let currentLevel = parseInt(sessionStorage.getItem('nextLevel')) || 1;
 let request;
-let gravity = 0.38; //0.67
+let terminalVelocity = 15;
+let gravity = 0.8; //0.67
 let gravitySpeed = 0.7;
 let levelLastSpeed = 0;
 let dyingTimer;
@@ -174,17 +175,32 @@ function dying() {
 window.onload = () => {
   let reloading = sessionStorage.getItem('reloading');
   let nextLevel = sessionStorage.getItem('nextLevel');
+  let musicVolume = sessionStorage.getItem('musicVolume');
+  let effectsVolume = sessionStorage.getItem('effectsVolume');
+
+  let volumeControlEl = document.getElementById('volume-control');
+  let volumeEffectsEl = document.getElementById('volume-effects');
+
+  volumeControlEl.value = musicVolume;
+  volumeEffectsEl.value = effectsVolume;
 
   const updateCopyright = () => {
     const currentYear = new Date().getFullYear();
     document.getElementById('currentYear').innerHTML = currentYear;
   };
 
+  const setInitialVolume = () => {
+    backSound.sound.volume = musicVolume / 100;
+    changeAllEffects(effectsVolume);
+  };
+
   updateCopyright();
+  setInitialVolume();
 
   document.addEventListener('keydown', controller.keyListener);
   document.addEventListener('keyup', controller.keyListener);
   document.getElementById('btn-play').onclick = () => {
+    goToLevel(currentLevel);
     currentGame.startGame();
   };
   document.getElementById('btn-play').onmouseover = () => {
@@ -199,11 +215,12 @@ window.onload = () => {
   document.getElementById('btn-finish').onclick = () => {
     currentGame.finishGame();
   };
-  document.getElementById('volume-control').onchange = (e) => {
+  volumeControlEl.onchange = (e) => {
     backSound.sound.volume = e.target.value / 100;
+    sessionStorage.setItem('musicVolume', e.target.value);
   };
-  document.getElementById('volume-effects').onchange = (e) => {
-    changeAllEffects(e);
+  volumeEffectsEl.onchange = (e) => {
+    changeAllEffects(e.target.value);
   };
 
   //activate the start button after page is fully loaded
@@ -219,7 +236,7 @@ window.onload = () => {
     }
 
     if (currentLevel > 1) {
-      goTo(currentLevel);
+      goToLevel(currentLevel);
     }
 
     currentGame.startGame();
@@ -234,7 +251,7 @@ function changeImageBack() {
   document.getElementById('robot').src = './images/cover.png';
 }
 
-const changeAllEffects = (e) => {
+const changeAllEffects = (value) => {
   let sounds = [
     jumpSound,
     shootSound,
@@ -251,8 +268,8 @@ const changeAllEffects = (e) => {
     bossDeathSound,
   ];
 
-  sessionStorage.setItem('volumeEffects', String(e.target.value));
+  sessionStorage.setItem('effectsVolume', String(value));
   sounds.forEach((sound) => {
-    sound.sound.volume = e.target.value / 100;
+    sound.sound.volume = value / 100;
   });
 };

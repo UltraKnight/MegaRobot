@@ -1,5 +1,7 @@
 class Player {
   constructor() {
+    this.godMode = false;
+
     this.x = 100;
     this.y = 500;
     this.xVelocity = 0;
@@ -172,13 +174,15 @@ class Player {
             this.canMeleeDamage = false;
             level.enemies[i].x += 100;
           }
-        } else {
-          if (this.left() + this.meleeRange <= level.enemies[i].right() && level.enemies[i].right() < this.left()) {
-            takeHit = true;
-            this.canMeleeDamage = false;
-            level.enemies[i].x -= 100;
-          }
+        } else if (
+          this.left() + this.meleeRange <= level.enemies[i].right() &&
+          level.enemies[i].right() < this.left()
+        ) {
+          takeHit = true;
+          this.canMeleeDamage = false;
+          level.enemies[i].x -= 100;
         }
+
         if (takeHit) {
           level.enemies[i].receiveDmg(this.meleeDamage);
           //level.enemies[i].updateEnemy();
@@ -276,10 +280,10 @@ class Player {
     //keep falling if in the air
     if (!this.onGround) {
       gravitySpeed += gravity;
+      // limit the gravitySpeed to terminalVelocity
+      gravitySpeed = Math.min(gravitySpeed, terminalVelocity);
+
       this.y += gravitySpeed;
-      this.y += gravitySpeed;
-    } else {
-      gravitySpeed = 2;
     }
 
     if (this.jumping && this.jumpHeight > 0) {
@@ -448,6 +452,8 @@ class Player {
   }
 
   receiveDmg(damageValue) {
+    if (this.godMode) return;
+
     if (this.health > 0 && damageValue <= this.health) {
       this.health -= damageValue;
     } else if (currentGame.hasEnded === false) {

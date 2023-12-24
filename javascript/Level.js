@@ -27,7 +27,7 @@ const level = {
     `./images/collectors/blue-shot/blue-shot.png`,
   ],
   trapsPos: [
-    [320, 610],
+    [1200, 610],
     [3335, 545],
     [6000, 630],
     [6500, 630],

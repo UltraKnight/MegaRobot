@@ -1,5 +1,5 @@
 //just change the properties of the level :)
-const goTo = (currentLevel) => {
+const goToLevel = (currentLevel) => {
   currentGame.player.x = 100;
   currentGame.player.y = 500;
   currentGame.player.superCounter = 200;
