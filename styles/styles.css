@@ -99,7 +99,7 @@ button:enabled:hover {
 }
 
 #game-stage {
-  width: 99%;
+  height: 85vh;
   margin: 0 auto;
   display: none;
 }
