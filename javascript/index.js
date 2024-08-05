@@ -190,7 +190,7 @@ window.onload = () => {
   };
 
   const setInitialVolume = () => {
-    backSound.sound.volume = musicVolume / 100;
+    backSound.sound.volume = Math.floor(musicVolume / 100);
     changeAllEffects(effectsVolume);
   };
 
@@ -216,7 +216,7 @@ window.onload = () => {
     currentGame.finishGame();
   };
   volumeControlEl.onchange = (e) => {
-    backSound.sound.volume = e.target.value / 100;
+    backSound.sound.volume = Math.floor(e.target.value / 100);
     sessionStorage.setItem('musicVolume', e.target.value);
   };
   volumeEffectsEl.onchange = (e) => {
@@ -270,6 +270,6 @@ const changeAllEffects = (value) => {
 
   sessionStorage.setItem('effectsVolume', String(value));
   sounds.forEach((sound) => {
-    sound.sound.volume = value / 100;
+    sound.sound.volume = Math.floor(value / 100);
   });
 };
