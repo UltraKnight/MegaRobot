@@ -175,11 +175,14 @@ function dying() {
 window.onload = () => {
   let reloading = sessionStorage.getItem('reloading');
   let nextLevel = sessionStorage.getItem('nextLevel');
-  let musicVolume = sessionStorage.getItem('musicVolume');
-  let effectsVolume = sessionStorage.getItem('effectsVolume');
 
   let volumeControlEl = document.getElementById('volume-control');
   let volumeEffectsEl = document.getElementById('volume-effects');
+
+  let musicVolumeFromStorage = parseInt(sessionStorage.getItem('musicVolume'));
+  let effectsVolumeFromStorage = parseInt(sessionStorage.getItem('effectsVolume'));
+  let musicVolume = Number.isInteger(musicVolumeFromStorage) ? musicVolumeFromStorage : volumeControlEl.value;
+  let effectsVolume = Number.isInteger(effectsVolumeFromStorage) ? effectsVolumeFromStorage : volumeEffectsEl.value;
 
   volumeControlEl.value = musicVolume;
   volumeEffectsEl.value = effectsVolume;
@@ -190,7 +193,7 @@ window.onload = () => {
   };
 
   const setInitialVolume = () => {
-    backSound.sound.volume = Math.floor(musicVolume / 100);
+    backSound.sound.volume = Math.min((musicVolume ?? 0) / 100, 1);
     changeAllEffects(effectsVolume);
   };
 
@@ -216,7 +219,7 @@ window.onload = () => {
     currentGame.finishGame();
   };
   volumeControlEl.onchange = (e) => {
-    backSound.sound.volume = Math.floor(e.target.value / 100);
+    backSound.sound.volume = Math.min(e.target.value / 100, 1);
     sessionStorage.setItem('musicVolume', e.target.value);
   };
   volumeEffectsEl.onchange = (e) => {
@@ -268,8 +271,8 @@ const changeAllEffects = (value) => {
     bossDeathSound,
   ];
 
-  sessionStorage.setItem('effectsVolume', String(value));
+  sessionStorage.setItem('effectsVolume', Number(value));
   sounds.forEach((sound) => {
-    sound.sound.volume = Math.floor(value / 100);
+    sound.sound.volume = Math.min((value ?? 0) / 100, 1);
   });
 };
