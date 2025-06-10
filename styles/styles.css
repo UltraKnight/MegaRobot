@@ -93,13 +93,14 @@ button:enabled:hover {
 
 #div-canvas {
   display: block;
-  width: 99vw;
+  width: 100vw;
   margin: 0 auto;
   text-align: center;
 }
 
 #game-stage {
-  height: 85vh;
+  height: auto;
+  width: 100%;
   margin: 0 auto;
   display: none;
 }
