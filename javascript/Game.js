@@ -1,8 +1,6 @@
 class Game {
   constructor() {
     this.player = {};
-    this.controller = {};
-    this.collectors = {}; //object of array of items of the game like -> life, armor parts, etc.
     this.hasEnded = false;
     this.lastLevel = 2;
   }

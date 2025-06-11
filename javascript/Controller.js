@@ -36,6 +36,7 @@ const controller = {
       switch (e.code) {
         case 'Escape':
         case 'KeyF':
+          // TODO: check if it is not game over
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
