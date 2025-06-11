@@ -5,8 +5,8 @@ class Bomb {
     this.y = y;
 
     //this.animation = new ObjAnimation(5, `./images/player/bullet/bullet.png`, 170, 139);
-    this.animation = new ObjAnimation(2, `./images/enemies/bomb/bomb.png`, 250, 326);
-    this.exploding = new ObjAnimation(8, `./images/enemies/bomb-exploding/exploding.png`, 298, 298);
+    this.animation = new ObjAnimation(2, `./images/enemies/bomb/bomb_250_326.png`, 250, 326);
+    this.exploding = new ObjAnimation(8, `./images/enemies/bomb/exploding_298_298.png`, 298, 298);
     this.width = 50;
     this.height = 50;
     this.damageValue = damageValue;

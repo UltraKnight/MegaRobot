@@ -1,8 +1,8 @@
 //death is managed in player move()
 class Robot {
   constructor() {
-    let enemyType = Math.floor(Math.random() * (4 - 1) + 1); //random from 1 to 3
-    let possiblePosition = [-100, canvas.width + 1000];
+    let enemyType = Math.floor(Math.random() * (4 - 1) + 1); // random from 1 to 3
+    let possiblePosition = [-100, canvas.width + 1000]; // enemies either spawn at the most left or most right of the stage
     let definitivePositionIndex = 0;
 
     definitivePositionIndex = Math.floor(Math.random() * possiblePosition.length); //0 or 1
@@ -22,10 +22,10 @@ class Robot {
     this.y = level.groundY;
     this.width = 180;
     this.height = 190;
-    //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
-    this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 478, 629);
-    this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack/attack1.png`, 478, 411);
-    this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death/death.png`, 320, 237);
+    //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk1_478_629.png`, 877, 1187);
+    this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk1_478_629.png`, 478, 629);
+    this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack1_478_411.png`, 478, 411);
+    this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death1_320_237.png`, 320, 237);
     this.attacking = false;
     this.currentAnimation = 'walking'; //used in animation changing - not implemented yet
     this.animations = ['walking', 'attack1']; //used to change animation when its time - not implemented yet
