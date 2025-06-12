@@ -31,8 +31,10 @@ class Robot {
     this.animations = ['walking', 'attack1']; //used to change animation when its time - not implemented yet
     this.isEnemy = true;
     this.animating = false; //start animation from the beginning if it is set to false
-    this.changeAnimationAfter = 0; //change animation after count to - not implemented yet
     this.bombDamage = enemyType > 1 ? 2 : 1; //bomb damage based on enemy type
+
+    this.changeActionCooldown = 1000; // ms
+    this.changeActionTimer = 0;
   }
 
   left() {
@@ -77,9 +79,9 @@ class Robot {
         this.animating = true;
 
         if (this.lookingRight) {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 1000, true, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 900, true, this.bombDamage));
         } else {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -1000, false, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -900, false, this.bombDamage));
         }
 
         this.currentAnimation = 'walking';
@@ -98,7 +100,10 @@ class Robot {
 
   move(deltaTime) {
     const deltaSeconds = deltaTime / 1000;
-    if (this.changeAnimationAfter % 100 === 0 && this.currentAnimation !== 'dying') {
+    this.changeActionTimer += deltaTime;
+
+    if (this.changeActionTimer >= this.changeActionCooldown && this.currentAnimation !== 'dying') {
+      this.changeActionTimer = 0;
       this.currentAnimation = this.animations[Math.floor(Math.random() * this.animations.length)];
       this.changeAnimationAfter = 0;
       this.animating = false;
@@ -111,8 +116,6 @@ class Robot {
     } else {
       this.x -= level.speed;
     }
-
-    this.changeAnimationAfter++;
   }
 
   updateEnemy(deltaTime) {

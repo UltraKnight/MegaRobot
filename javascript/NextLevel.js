@@ -62,7 +62,7 @@ const goToLevel = (currentLevel) => {
         './images/platforms/tile_middle.png',
       ];
 
-      level.spawnCooldown = 200;
+      level.spawnCooldown = 2500; // 2.5s
       break;
   }
 };

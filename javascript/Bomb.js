@@ -33,7 +33,7 @@ class Bomb {
       // === to play the sound just once
       boomSound.play();
     }
-    if (this.goUp <= 10) {
+    if (this.goUp <= 1) {
       this.exploding.animate(true, deltaTime, this.rightOrLeft, this.x, this.y, this.width, this.height, 3);
     } else {
       this.animation.animate(true, deltaTime, this.rightOrLeft, this.x, this.y, this.width, this.height, 1); //cols ??
@@ -51,15 +51,15 @@ class Bomb {
     //     this.y += 3;
     // }
     if (this.goUp > 50) {
-      this.y -= 300 * deltaSeconds;
-    } else if (this.goUp > 40) {
       this.y -= 200 * deltaSeconds;
+    } else if (this.goUp > 40) {
+      this.y -= 150 * deltaSeconds;
     } else {
-      this.y += 300.5 * deltaSeconds;
+      this.y += 180 * deltaSeconds;
     }
 
     if (this.goUp > 0) {
-      this.goUp--;
+      this.goUp = Math.max(this.goUp - deltaTime / 16.67, 0);
     }
   }
 

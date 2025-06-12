@@ -93,11 +93,9 @@ class Player {
         if (enemy.health > 0) {
           this.receiveDmg(1);
           if (this.x > 100 && enemy.lookingRight) {
-            enemy.x -= 100; // teleport the enemy to avoid multiple collisions and instant death
-            this.x += 100;
+            enemy.x -= 200; // teleport the enemy to avoid multiple collisions and instant death
           } else if (this.x > 100 && enemy.lookingRight === false) {
-            this.x -= 100; // teleport the enemy to avoid multiple collisions and instant death
-            this.x += 100;
+            enemy.x -= 200; // teleport the enemy to avoid multiple collisions and instant death
           }
         }
       }
@@ -220,6 +218,7 @@ class Player {
         }
       }
     } else {
+      this.updateSuperShot(deltaTime);
       shootSound.stop();  
     }
 
@@ -558,10 +557,9 @@ class Player {
   updateSuperShot(deltaTime) {
     this.superShotTimer += deltaTime;
     
-    // TODO: improve this - faster superShot (rapid-s) is hardcoded and defined as 1000ms
+    // TODO: improve this - faster superShot is hardcoded and defined as 1000ms
     const hasPowerUp = this.superShotCooldown === 1000;
-    const powerUpSpeedMultiplier = hasPowerUp ? 2 : 1;
-    let fillRatio = Math.min(this.superShotTimer / this.superShotCooldown * powerUpSpeedMultiplier, 1);
+    let fillRatio = Math.min(this.superShotTimer / this.superShotCooldown, 1);
 
 
     ctx.strokeStyle = 'red';

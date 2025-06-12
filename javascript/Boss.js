@@ -71,19 +71,19 @@ class Boss {
 
         if (this.lookingRight) {
           level.bombs.push(
-            new Bomb(this.x - randomDistance, this.y + this.height / 2 + randomX, 6000, true, this.bombDamage),
+            new Bomb(this.x - randomDistance, this.y + this.height / 2 + randomX, 700, true, this.bombDamage),
           );
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2 + randomX, 6000, true, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2 + randomX, 700, true, this.bombDamage));
           level.bombs.push(
-            new Bomb(this.x + randomDistance, this.y + this.height / 2 + randomX, 6000, true, this.bombDamage),
+            new Bomb(this.x + randomDistance, this.y + this.height / 2 + randomX, 700, true, this.bombDamage),
           );
         } else {
           level.bombs.push(
-            new Bomb(this.x - randomDistance, this.y + this.height / 2 + randomX, -6000, false, this.bombDamage),
+            new Bomb(this.x - randomDistance, this.y + this.height / 2 + randomX, -700, false, this.bombDamage),
           );
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2 + randomX, -6000, false, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2 + randomX, -700, false, this.bombDamage));
           level.bombs.push(
-            new Bomb(this.x + randomDistance, this.y + this.height / 2 + randomX, -6000, false, this.bombDamage),
+            new Bomb(this.x + randomDistance, this.y + this.height / 2 + randomX, -700, false, this.bombDamage),
           );
         }
 

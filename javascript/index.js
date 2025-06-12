@@ -150,7 +150,7 @@ function loop(timestamp) {
     currentGame.player.idle(deltaTime);
   }
 
-  level.drawFront();
+  level.drawFront(deltaTime);
 
   if (currentGame.hasEnded) {
     if (!rainSound.sound.paused) {
