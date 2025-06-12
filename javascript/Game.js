@@ -39,7 +39,6 @@ class Game {
 
     document.getElementById('game-stage').style.display = 'block';
     document.getElementById('main-menu').style.display = 'none';
-    document.getElementById('robot').style.display = 'none';
 
     backSound.sound.src = `./sounds/background/backSound${currentLevel}.mp3`;
     if (backSound.sound.paused) {

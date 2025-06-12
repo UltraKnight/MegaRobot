@@ -232,12 +232,7 @@ window.onload = () => {
     goToLevel(currentLevel);
     currentGame.startGame();
   };
-  document.getElementById('btn-play').onmouseover = () => {
-    changeImage();
-  };
-  document.getElementById('btn-play').onmouseout = () => {
-    changeImageBack();
-  };
+
   document.getElementById('btn-play-again').onclick = () => {
     currentGame.startGame();
   };
@@ -271,14 +266,6 @@ window.onload = () => {
     currentGame.startGame();
   }
 };
-
-function changeImage() {
-  document.getElementById('robot').src = './images/cover-hover.png';
-}
-
-function changeImageBack() {
-  document.getElementById('robot').src = './images/cover.png';
-}
 
 const changeAllEffects = (value) => {
   let sounds = [
