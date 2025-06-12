@@ -153,13 +153,14 @@ function loop(timestamp) {
   level.drawFront();
 
   if (currentGame.hasEnded) {
-    cancelAnimationFrame(request);
     if (!rainSound.sound.paused) {
       rainSound.sound.pause();
     }
+    
+    cancelAnimationFrame(request);
 
     if (currentGame.player.health < 0) {
-      request = requestAnimationFrame((deltaTime) => dying(deltaTime));
+      request = requestAnimationFrame((timestamp) => { lastTime = timestamp; dying(timestamp); });
       return;
     } else {
       currentGame.gameOver();
@@ -182,7 +183,10 @@ function loop(timestamp) {
   request = requestAnimationFrame(loop);
 }
 
-function dying(deltaTime) {
+function dying(timestamp) {
+  const deltaTime = timestamp - lastTime;
+  lastTime = timestamp;
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   level.updateLevel(deltaTime);
   currentGame.player.die(deltaTime);
