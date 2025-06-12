@@ -117,11 +117,6 @@ class Player {
           }
 
           if (this.y >= level.groundY && !this.collidingLeft && !this.collidingRight) {
-            if (this.lookingRight) {
-              this.dashSpeed += 400 * deltaSeconds;
-            } else {
-              this.dashSpeed -= 400 * deltaSeconds;
-            }
 
             this.collidingRight = false;
             this.collidingLeft = false;
@@ -148,7 +143,7 @@ class Player {
           }
         }
 
-        if (this.collidingRight || (this.collidingLeft && this.collidingTop === false && this.onPlatform === false)) {
+        if ((this.collidingRight || this.collidingLeft) && (!this.collidingTop && !this.onPlatform)) {
           if (this.sliding) {
             this.sliding = false;
             this.canSlide = false;
@@ -352,13 +347,17 @@ class Player {
         if (canMoveLeft && this.dashSpeed < 0 && this.x <= this.maxRight) {
           level.speed -= 800 * deltaSeconds;
           this.dashSpeed += 300 * deltaSeconds;
+
         }
-      } else if (this.dashSpeed === 0) {
+      // keep sliding if colliding top
+      } else if (this.dashSpeed === 0 && !this.collidingTop) {
         //this.idle();
         this.sliding = false;
-      } else {
+        this.animating = false;
+      } else if (!this.collidingTop) {
         this.sliding = false;
         this.dashSpeed = 0;
+        this.animating = false;
       }
     }
 
@@ -404,7 +403,7 @@ class Player {
       this.bottom() < obstacle.top() ||
       top > obstacle.bottom() ||
       right < obstacle.left() ||
-      left > obstacle.right()
+      left - 5 > obstacle.right()
     );
 
     if (colliding) {
@@ -426,7 +425,7 @@ class Player {
       //if(!this.collidingBottom) {
       this.collidingLeft =
         this.lookingRight === false &&
-        left <= obstacle.right() &&
+        left - 5 <= obstacle.right() &&
         right > obstacle.right() &&
         !(this.bottom() <= obstacle.top() && top >= obstacle.bottom());
       this.collidingRight =
@@ -438,8 +437,8 @@ class Player {
       this.collidingTop =
         top + 5 <= obstacle.bottom() &&
         this.bottom() > obstacle.bottom() + 40 &&
-        right - 15 > obstacle.left() &&
-        left + 15 < obstacle.right(); //r -20 / l 25
+        right - 10 > obstacle.left() &&
+        left + 10 < obstacle.right(); //r -20 / l 25
       //}
       //this.collidingBottom = xMiddle >= obstacle.top() && xMiddle >= obstacle.top() && xMiddle <= obstacle.top() + obstacle.width;
       //this.collidingBottom = obstacle.top() <= x || obstacle.y > x && obstacle.top() + obstacle.width < x;

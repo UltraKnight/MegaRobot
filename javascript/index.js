@@ -61,9 +61,9 @@ function loop(timestamp) {
     if (currentGame.player.onGround && currentGame.player.canSlide) {
       if (!(currentGame.player.jumping || currentGame.player.sliding)) {
         if (currentGame.player.lookingRight) {
-          currentGame.player.dashSpeed = 304;
+          currentGame.player.dashSpeed = 300;
         } else {
-          currentGame.player.dashSpeed = -304;
+          currentGame.player.dashSpeed = -300;
         }
         currentGame.player.sliding = true;
         currentGame.player.canSlide = false;
