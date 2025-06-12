@@ -62,8 +62,8 @@ class Boss {
       );
 
       this.animating = true;
-      //generate the bomb after the animation finishes
-      if (this.attack1Animation.currentFrame === this.attack1Animation.totalFrames - 1) {
+      //generate the bomb at the right moment of the animation
+      if (this.attack1Animation.currentFrame === this.attack1Animation.totalFrames - 3) {
         this.animating = true;
 
         let randomX = Math.floor(Math.random() * (151 - 100) + 100); // 100 to 150

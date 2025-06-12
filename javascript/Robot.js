@@ -72,7 +72,8 @@ class Robot {
       );
 
       this.animating = true;
-      if (this.attack1Animation.currentFrame === this.attack1Animation.totalFrames) {
+      //generate the bomb at the right moment of the animation
+      if (this.attack1Animation.currentFrame === this.attack1Animation.totalFrames - 3) {
         this.animating = true;
 
         if (this.lookingRight) {
