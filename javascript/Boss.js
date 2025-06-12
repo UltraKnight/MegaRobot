@@ -7,10 +7,10 @@ class Boss {
     this.health = 60;
     this.width = 400;
     this.height = 460;
-    //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 877, 1187);
-    this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk.png`, 478, 629);
-    this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack/attack1.png`, 478, 411);
-    this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death/death.png`, 320, 237);
+    //this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk/walk1_478_629.png`, 877, 1187);
+    this.walkAnimation = new ObjAnimation(12, `./images/enemies/Robot0${enemyType}/walk1_478_629.png`, 478, 629);
+    this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack1_478_411.png`, 478, 411);
+    this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death1_320_237.png`, 320, 237);
     this.attacking = false;
     this.lookingRight = false; // enemies walk to left
     this.currentAnimation = 'walking'; //used in animation changing - not implemented yet
