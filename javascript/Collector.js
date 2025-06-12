@@ -24,16 +24,17 @@ class Collector {
     return this.y + this.height - 5;
   }
 
-  draw() {
+  draw(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
     this.x = this.x - level.speed;
     if (this.x < canvas.width - 300 && this.y > -60) {
-      this.y -= 1;
+      this.y -= 80 * deltaSeconds;
     }
-    this.animation.animate(true, true, this.x, this.y, this.width, this.height, this.cols); //cols
+    this.animation.animate(true, deltaTime, true, this.x, this.y, this.width, this.height, this.cols); //cols
   }
 
-  updateCollector() {
-    this.draw();
+  updateCollector(deltaTime) {
+    this.draw(deltaTime);
   }
 
   hitPlayer() {
@@ -63,8 +64,7 @@ class Collector {
           break;
 
         case 'super-shot':
-          currentGame.player.superCounter = 100;
-          currentGame.player.superShotTimer = 100;
+          currentGame.player.superShotCooldown = 1000;
 
           if (currentLevel === 1) {
             setTimeout(() => {
@@ -78,6 +78,7 @@ class Collector {
           //NEW CANNON
           //call this player animation to try to prevent the player from blinking while changing the image sources
           currentGame.player.drawStatic();
+          // image source changes due to the new cannon
           currentGame.player.dieAnimation = new ObjAnimation(10, './images/player/super/die_10_562-519.png', 562, 519);
           currentGame.player.idleAnimation = new ObjAnimation(10, './images/player/super/idle_10_567-556.png');
           currentGame.player.jumpAnimation = new ObjAnimation(10, './images/player/super/jump_10_567-556.png');
@@ -100,7 +101,7 @@ class Collector {
               currentGame.message('Shoot shoot shoot...');
             }, 800);
           }
-          currentGame.player.shootCounter = 14;
+          currentGame.player.shootCooldown = 200; // ms
           break;
         case 'blue-shot':
           if (currentLevel === 1) {

@@ -10,11 +10,11 @@ class Robot {
 
     if (this.x > 0) {
       this.lookingRight = false; // enemies walk to left
-      this.speed = -(2 + enemyType);
+      this.speed = -(200 + enemyType);
       this.health = enemyType + 2;
     } else {
       this.lookingRight = true; // enemies walk to right
-      this.speed = 2 + enemyType;
+      this.speed = 200 + enemyType;
       this.health = enemyType + 2;
     }
 
@@ -54,14 +54,15 @@ class Robot {
     }
   }
 
-  draw() {
+  draw(deltaTime) {
     if (this.currentAnimation === 'walking') {
-      this.walkAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+      this.walkAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
 
       this.animating = true; //will be false when the animation changes - not implemented
     } else if (this.currentAnimation === 'attack1') {
       this.attack1Animation.animate(
         this.animating,
+        deltaTime,
         this.lookingRight,
         this.x,
         this.y - 30,
@@ -75,9 +76,9 @@ class Robot {
         this.animating = true;
 
         if (this.lookingRight) {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 10, true, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 1000, true, this.bombDamage));
         } else {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -10, false, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -1000, false, this.bombDamage));
         }
 
         this.currentAnimation = 'walking';
@@ -88,13 +89,14 @@ class Robot {
       if (this.deathAnimation.currentFrame === this.deathAnimation.totalFrames) {
         this.animating = false;
       } else {
-        this.deathAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+        this.deathAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
         this.animating = true;
       }
     }
   }
 
-  move() {
+  move(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
     if (this.changeAnimationAfter % 100 === 0 && this.currentAnimation !== 'dying') {
       this.currentAnimation = this.animations[Math.floor(Math.random() * this.animations.length)];
       this.changeAnimationAfter = 0;
@@ -102,9 +104,9 @@ class Robot {
     }
 
     if (this.currentAnimation === 'walking') {
-      this.x += this.speed - level.speed;
+      this.x += (this.speed * deltaSeconds) - level.speed;
     } else if (this.currentAnimation === 'attack1') {
-      this.x -= level.speed;
+      this.x -= level.speed
     } else {
       this.x -= level.speed;
     }
@@ -112,8 +114,8 @@ class Robot {
     this.changeAnimationAfter++;
   }
 
-  updateEnemy() {
-    this.move();
-    this.draw();
+  updateEnemy(deltaTime) {
+    this.move(deltaTime);
+    this.draw(deltaTime);
   }
 }

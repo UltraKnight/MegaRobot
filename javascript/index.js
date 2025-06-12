@@ -4,23 +4,48 @@ const ctx = canvas.getContext('2d');
 let currentGame = new Game();
 let currentLevel = parseInt(sessionStorage.getItem('nextLevel')) || 1;
 let request;
-let terminalVelocity = 15;
-let gravity = 0.8; //0.67
-let gravitySpeed = 0.7;
+let terminalVelocity = 1100;
+let gravity = 900; // 670
+let gravitySpeed = 800;
 let levelLastSpeed = 0;
 let dyingTimer;
+let lastTime = performance.now();
+let fpsLastUpdate = lastTime;
+let frames = 0;
+let FPS = 0;
 
 currentGame.player = new Player();
 
 function loop(timestamp) {
+  let deltaTime = timestamp - lastTime;
+   if (deltaTime <= 0 || deltaTime > 1000) {
+    deltaTime = 0.016; // fallback to 60 FPS
+  }
+  
+  lastTime = timestamp;
+  frames++;
+
+  if (timestamp - fpsLastUpdate >= 1000) {
+    FPS = Math.floor(1000 / deltaTime);
+    fpsLastUpdate = timestamp;
+    frames = 0;
+  }
+
   if (dyingTimer === undefined) {
     dyingTimer = timestamp;
   }
 
+
   if (controller.pause) {
+    // Update lastTime so when unpaused, deltaTime is accurate
+    lastTime = timestamp;
+    requestAnimationFrame(loop);
     return;
   }
-  level.updateLevel();
+
+  // lastTime = timestamp;
+
+  level.updateLevel(deltaTime);
 
   if (controller.k) {
     if (currentGame.player.onGround) {
@@ -66,39 +91,39 @@ function loop(timestamp) {
         currentGame.player.jumping === false &&
         currentGame.player.sliding === false
       ) {
-        currentGame.player.shoot();
+        currentGame.player.shoot(deltaTime);
       }
     }
   }
 
   if (controller.right && controller.left === false) {
     if (!currentGame.player.lookingRight) {
-      currentGame.player.turn();
+      currentGame.player.turn(deltaTime);
     }
     if (
       !(currentGame.player.jumping || currentGame.player.melee || currentGame.player.sliding) &&
       currentGame.player.onGround
     ) {
-      currentGame.player.run();
+      currentGame.player.run(deltaTime);
     }
     if (!currentGame.player.sliding) {
-      currentGame.player.xVelocity = 6;
+      currentGame.player.xVelocity = 600;
     }
   }
 
   if (controller.left) {
     if (currentGame.player.lookingRight) {
-      currentGame.player.turn();
+      currentGame.player.turn(deltaTime);
     }
     if (
       !(currentGame.player.jumping || currentGame.player.melee || currentGame.player.sliding) &&
       currentGame.player.onGround
     ) {
-      currentGame.player.run();
+      currentGame.player.run(deltaTime);
     }
 
     if (!currentGame.player.sliding) {
-      currentGame.player.xVelocity = -6;
+      currentGame.player.xVelocity = -600;
     }
   }
 
@@ -106,24 +131,25 @@ function loop(timestamp) {
   //     currentGame.player.inCollision = true;
   // }
 
-  currentGame.player.move();
+  currentGame.player.move(deltaTime);
   currentGame.showLife();
-  currentGame.player.updateSuperShot();
+  currentGame.showFPS(FPS);
+  currentGame.player.updateSuperShot(deltaTime);
 
   if (currentGame.player.jumping) {
-    currentGame.player.jump();
+    currentGame.player.jump(deltaTime);
   }
 
   if (currentGame.player.sliding) {
-    currentGame.player.dash();
+    currentGame.player.dash(deltaTime);
   }
 
   if (currentGame.player.melee && currentGame.player.jumping === false) {
-    currentGame.player.meleeAtk();
+    currentGame.player.meleeAtk(deltaTime);
   }
 
   if (currentGame.player.animating === false && currentGame.player.collidingTop === false) {
-    currentGame.player.idle();
+    currentGame.player.idle(deltaTime);
   }
 
   level.drawFront();
@@ -135,7 +161,7 @@ function loop(timestamp) {
     }
 
     if (currentGame.player.health < 0) {
-      request = requestAnimationFrame(dying);
+      request = requestAnimationFrame((deltaTime) => dying(deltaTime));
       return;
     } else {
       currentGame.gameOver();
@@ -158,10 +184,10 @@ function loop(timestamp) {
   request = requestAnimationFrame(loop);
 }
 
-function dying() {
+function dying(deltaTime) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  level.updateLevel();
-  currentGame.player.die();
+  level.updateLevel(deltaTime);
+  currentGame.player.die(deltaTime);
   diedSound.play();
   if (currentGame.player.dieAnimation.currentFrame === currentGame.player.dieAnimation.totalFrames) {
     cancelAnimationFrame(request);

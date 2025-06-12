@@ -3,8 +3,7 @@ const level = {
   x: 0,
   speed: 0,
   speedAcumulator: 0, //used to make other resources scroll with the level
-  newEnemyTimer: 1,
-  spawnTimer: 250,
+  spawnCooldown: 5000, // 5s
   bossSpawned: false,
   raining: false,
   enemies: [],
@@ -54,6 +53,7 @@ const level = {
     './images/platforms/tile_middle.png',
   ],
   groundY: 500,
+  spawnTimer: 0,
 
   drawBack(source = this.layers[0], y = 0) {
     let img = new Image();
@@ -63,14 +63,14 @@ const level = {
     ctx.drawImage(img, this.x, y, canvas.width, canvas.height);
   },
 
-  drawFront() {
+  drawFront(deltaTime) {
     //draw front parte if there's one
     if (this.layers.length > 1) {
       this.drawBack(this.layers[1], 0);
     }
 
     if (this.raining) {
-      rain.makeRain();
+      rain.makeRain(deltaTime);
 
       if (rainSound.sound.paused) {
         rainSound.play();
@@ -93,7 +93,9 @@ const level = {
     this.x %= canvas.width;
   },
 
-  updateLevel() {
+  updateLevel(deltaTime) {
+    this.spawnTimer += deltaTime;
+
     this.move();
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
     this.drawBack();
@@ -105,7 +107,7 @@ const level = {
 
     //update traps
     for (const trap of this.traps) {
-      trap.draw();
+      trap.draw(deltaTime);
       if (trap.x < 1920 && trap.x > 0) {
         if (sawSound.sound.currentTime > 1.98) {
           sawSound2.play();
@@ -119,7 +121,7 @@ const level = {
 
     //update collectors
     for (let i = 0; i < this.collectors.length; i++) {
-      this.collectors[i].updateCollector();
+      this.collectors[i].updateCollector(deltaTime);
       if (this.collectors[i].hitPlayer()) {
         this.collectors.splice(i, 1);
         hpPlusSound.play();
@@ -133,23 +135,22 @@ const level = {
       } else if (this.enemies[i].x > canvas.width + 1500 && this.enemies[i].lookingRight) {
         this.enemies.splice(i, 1);
       } else {
-        this.enemies[i].updateEnemy();
+        this.enemies[i].updateEnemy(deltaTime);
       }
     }
 
     //update dead enemies
     for (const enemy of this.enemiesToRemove) {
-      enemy.updateEnemy();
+      enemy.updateEnemy(deltaTime);
     }
 
     if (this.remainingRobots > 0) {
       //create enemies
-      if (this.newEnemyTimer % this.spawnTimer === 0) {
+      if (this.spawnTimer >= this.spawnCooldown) {
+        this.spawnTimer = 0;
         this.remainingRobots--;
-        this.newEnemyTimer = 0;
         this.enemies.push(new Robot());
       }
-      this.newEnemyTimer++;
     }
 
     //put the boss on the map
@@ -171,7 +172,7 @@ const level = {
 
     //update bombs
     for (let i = 0; i < level.bombs.length; i++) {
-      level.bombs[i].updateBomb();
+      level.bombs[i].updateBomb(deltaTime);
       if (
         level.bombs[i].hitPlayer() ||
         (level.bombs[i].x > canvas.width && level.bombs[i].leftOrRight === false) ||

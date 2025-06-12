@@ -36,11 +36,12 @@ const controller = {
       switch (e.code) {
         case 'Escape':
         case 'KeyF':
-          // TODO: check if it is not game over
+          if (currentGame.hasEnded) return; // ignore pause in gameover
           controller.pause = !controller.pause;
           if (!controller.pause) {
             request = requestAnimationFrame(loop);
           } else if (controller.pause) {
+            cancelAnimationFrame(loop);
             ctx.strokeStyle = 'silver';
             ctx.lineWidth = 2;
             ctx.font = 'bold 25px sans-serif';

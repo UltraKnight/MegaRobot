@@ -5,7 +5,7 @@ const rain = {
   height: canvas.height,
   raining: new ObjAnimation(3, `./images/env/rain/raining.png`, 1920, 1080),
 
-  makeRain() {
-    this.raining.animate(true, true, this.x, this.y, this.width, this.height, 1);
+  makeRain(deltaTime) {
+    this.raining.animate(true, deltaTime, true, this.x, this.y, this.width, this.height, 1);
   },
 };

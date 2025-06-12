@@ -2,11 +2,11 @@ class Bullet {
   constructor(superBullet = false, blueShot = false) {
     if (currentGame.player.lookingRight) {
       this.x = currentGame.player.right();
-      this.speed = 15;
+      this.speed = 1500;
       this.goRight = true;
     } else {
       this.x = currentGame.player.left();
-      this.speed = -15;
+      this.speed = -1500;
       this.goRight = false;
     }
 
@@ -40,61 +40,19 @@ class Bullet {
     return this.y + this.height;
   }
 
-  draw() {
-    this.animation.animate(true, this.goRight, this.x, this.y, this.width, this.height, 5);
+  draw(deltaTime) {
+    this.animation.animate(true, deltaTime, this.goRight, this.x, this.y, this.width, this.height, 5);
   }
 
-  move() {
-    this.x += this.speed - levelLastSpeed;
-    // if (this.x >= canvas.width || this.x < 0) {
-    //     currentGame.player.bullets.splice(bullet, 1);
-    // }
+  move(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
+    this.x += (this.speed * deltaSeconds) - levelLastSpeed;
   }
 
-  // hitEnemyOld(bullet) {
-  //     console.log(bullet);
-  //     let colliding = false;
-  //     for (let i = 0; i < level.enemies.length; i++) {
-  //         colliding = ! (this.bottom() < level.enemies[i].top() ||
-  //         this.top() > level.enemies[i].bottom() ||
-  //         this.right() < level.enemies[i].left() ||
-  //         this.left() > level.enemies[i].right());
-
-  //         if(colliding) {
-  //             level.enemies[i].receiveDmg(this.damageValue);
-  //             level.enemies[i].updateEnemy();
-  //             if(level.enemies[i].health <= 0 && level.enemies[i].currentAnimation !== 'dying') {
-  //                 level.enemies[i].currentAnimation = 'dying';
-  //                 level.enemiesToRemove.push(i); //must be removed after a while because the animation of dying
-  //                 //return false; //if colliding the bullet will be removed in the player move()
-  //             } else {
-  //                 currentGame.player.bullets.splice(bullet, 1);
-  //             }
-  //         }
-  //     }
-  // }
-
-  // hitEnemy(enemy) {
-  //     let colliding = false;
-  //     colliding = ! (this.bottom() < enemy.top() ||
-  //         this.top() > enemy.bottom() ||
-  //         this.right() < enemy.left() ||
-  //         this.left() > enemy.right());
-
-  //     if (colliding) {
-  //         if (enemy.health > 0 && enemy.health > this.damageValue) {
-  //             enemy.receiveDmg(this.damageValue);
-  //             return true;
-  //         } else {
-  //             return false;
-  //         }
-  //     }
-  // }
-
-  updateBullet() {
+  updateBullet(deltaTime) {
     //bullet stands for its position in the player array
-    this.move();
-    this.draw();
+    this.move(deltaTime);
+    this.draw(deltaTime);
     //this.hitEnemy();
   }
 }

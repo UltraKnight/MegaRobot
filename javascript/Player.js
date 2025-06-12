@@ -3,7 +3,7 @@ class Player {
     this.godMode = false;
 
     this.x = 100;
-    this.y = 500;
+    this.y = 501;
     this.xVelocity = 0;
     this.yVelocity = 0;
     this.width = 160;
@@ -31,11 +31,6 @@ class Player {
     this.canMelee = true;
     this.canMeleeDamage = true;
 
-    this.newBulletTimer = 0;
-    this.superShotTimer = 1;
-    this.superCounter = 200;
-    this.shootCounter = 18;
-
     this.inCollision = false;
     this.inCollisionWithEnemy = false;
     this.inCollisionWithPlatform = false;
@@ -58,6 +53,11 @@ class Player {
     this.runShootAnimation = new ObjAnimation(9, './images/player/runshoot_9_567-556.png');
     this.shootAnimation = new ObjAnimation(4, './images/player/shoot_4_567-556.png');
     this.slideAnimation = new ObjAnimation(8, './images/player/slide_10_567-556.png');
+
+    this.shootCooldown = 300; // ms
+    this.superShotCooldown = 2000; // 2s
+    this.shootTimer = 0;
+    this.superShotTimer = 0;
   }
 
   //for collision test purpose
@@ -72,7 +72,11 @@ class Player {
     ctx.stroke();
   }
 
-  move() {
+  move(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
+    // do it here, so first shot has no delay
+    this.shootTimer += deltaTime;
+
     let canMoveLeft = true;
     let canMoveRight = true;
     //If is in the end of the level, then game over
@@ -89,9 +93,11 @@ class Player {
         if (enemy.health > 0) {
           this.receiveDmg(1);
           if (this.x > 100 && enemy.lookingRight) {
-            enemy.x -= 100;
+            enemy.x -= 100; // teleport the enemy to avoid multiple collisions and instant death
+            this.x += 100;
           } else if (this.x > 100 && enemy.lookingRight === false) {
-            this.x -= 100;
+            this.x -= 100; // teleport the enemy to avoid multiple collisions and instant death
+            this.x += 100;
           }
         }
       }
@@ -110,11 +116,11 @@ class Player {
             this.idle();
           }
 
-          if (this.y >= level.groundY && this.collidingLeft === false && this.collidingRight === false) {
+          if (this.y >= level.groundY && !this.collidingLeft && !this.collidingRight) {
             if (this.lookingRight) {
-              this.dashSpeed += 304;
+              this.dashSpeed += 400 * deltaSeconds;
             } else {
-              this.dashSpeed -= 304;
+              this.dashSpeed -= 400 * deltaSeconds;
             }
 
             this.collidingRight = false;
@@ -180,7 +186,7 @@ class Player {
         ) {
           takeHit = true;
           this.canMeleeDamage = false;
-          level.enemies[i].x -= 100;
+          level.enemies[i].x -= 100 * deltaSeconds;
         }
 
         if (takeHit) {
@@ -198,37 +204,33 @@ class Player {
     }
 
     //super shot
-    if (this.superShotTimer % this.superCounter === 0) {
+    if (this.superShotTimer >= this.superShotCooldown) {
       this.superShot = true;
     }
 
-    //when shooting
+    // when shooting
     if (this.shooting) {
-      this.superShotTimer = 1;
-      this.updateSuperShot();
-      if (this.superShot === true) {
-        superShotSound.play();
-        this.bullets.push(new Bullet(true, this.hasBlueShot)); //true stands for super bullet
-        this.superShot = false;
+    if (this.shootTimer >= this.shootCooldown) {
+        this.shootTimer = 0;
+        this.superShotTimer = 0;
+        this.updateSuperShot(deltaTime); // reset super shot when shooting
+        if (this.superShot) {
+          superShotSound.play();
+          this.bullets.push(new Bullet(true, this.hasBlueShot)); //true stands for super bullet
+          this.superShot = false;
+          // dont shoot normal bullets if super shot is ready
+        } else {
+          shootSound.play();
+          this.bullets.push(new Bullet(false, this.hasBlueShot));
+        }
       }
-
-      if (this.newBulletTimer % this.shootCounter === 0) {
-        shootSound.play();
-        this.bullets.push(new Bullet(false, this.hasBlueShot));
-        this.newBulletTimer = 0;
-      }
-      this.newBulletTimer++;
     } else {
-      shootSound.stop();
-      this.newBulletTimer = 9;
-      if (this.superShotTimer < this.superCounter) {
-        this.superShotTimer++;
-      }
+      shootSound.stop();  
     }
 
     //updating and removing out of sight bullets
     for (let i = 0; i < this.bullets.length; i++) {
-      this.bullets[i].updateBullet();
+      this.bullets[i].updateBullet(deltaTime);
       for (let j = 0; j < level.enemies.length; j++) {
         let goToNext = false;
         //if(this.bullets[i].hitEnemy(level.enemies[j])) { //return true if enemy is alive
@@ -260,17 +262,13 @@ class Player {
           if (goToNext) break;
         }
       }
-      //this.bullets[i].updateBullet(i);
-
-      // if(this.bullets[i].x > canvas.width || this.bullets[i].x < 0 || this.bullets[i].hitEnemy()) {
-      //     this.bullets.splice(i, 1);
-      // }
     }
+    
 
     //if is falling - the char is not on the ground (groundY)
-    if (this.y < level.groundY && this.onPlatform === false) {
+    if (this.y < level.groundY && !this.onPlatform) {
       this.onGround = false;
-      if (this.jumping === false) {
+      if (!this.jumping) {
         this.idle();
       }
     } else {
@@ -279,17 +277,19 @@ class Player {
 
     //keep falling if in the air
     if (!this.onGround) {
-      gravitySpeed += gravity;
+      gravitySpeed += gravity * deltaSeconds * 2.0;
       // limit the gravitySpeed to terminalVelocity
       gravitySpeed = Math.min(gravitySpeed, terminalVelocity);
-
-      this.y += gravitySpeed;
+      this.yVelocity += gravitySpeed;
     }
 
-    if (this.jumping && this.jumpHeight > 0) {
-      //this.y -= 16;
-      this.y -= 15;
-      this.jumpHeight -= 15;
+    if (this.jumping && this.jumpHeight > 0) { // jumpHeight is set in the loop (index.js)
+      //this.y -= 16; 
+      const jumpForce = 450;  
+      this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 136;
+      // jumpHeight has no influence on the player
+      // it is used to know when it reaches the max jump height
+      this.jumpHeight -= (360 + gravitySpeed) * deltaSeconds;
       this.onPlatform = false;
     } else if (this.jumping && this.jumpHeight <= 0) {
       this.idle();
@@ -300,13 +300,13 @@ class Player {
 
     //just for test - should verify if the player can move
     if (this.xVelocity > 0 && this.x >= this.maxRight) {
-      level.speed += this.xVelocity; //level.speed = positive
+      level.speed += this.xVelocity * deltaSeconds; //level.speed = positive
       this.xVelocity = 0;
     }
 
     if (this.xVelocity < 0 && this.x <= this.maxRight) {
       if (level.x < 0) {
-        level.speed += this.xVelocity; //level.speed = negative
+        level.speed += this.xVelocity * deltaSeconds; //level.speed = negative
         this.xVelocity = 0;
       }
     }
@@ -325,8 +325,8 @@ class Player {
       }
     }
 
-    this.x += this.xVelocity;
-    this.y += this.yVelocity;
+    this.x += this.xVelocity * deltaSeconds;
+    this.y += this.yVelocity * deltaSeconds;
 
     //dash movement - moves the char or the screen depending on the char position inside the canvas
     if (this.sliding && this.onGround) {
@@ -337,21 +337,21 @@ class Player {
 
       if (this.dashSpeed > 0) {
         if (canMoveRight) {
-          this.x += 8;
-          this.dashSpeed -= 8;
+          this.x += 800 * deltaSeconds;
+          this.dashSpeed -= 300 * deltaSeconds;
         }
         if (!canMoveRight) {
-          level.speed += 8;
-          this.dashSpeed -= 8;
+          level.speed += 800 * deltaSeconds;
+          this.dashSpeed -= 300 * deltaSeconds;
         }
       } else if (this.dashSpeed < 0) {
         if (canMoveLeft && level.x >= 0) {
-          this.x -= 8;
-          this.dashSpeed += 8;
+          this.x -= 800 * deltaSeconds;
+          this.dashSpeed += 300 * deltaSeconds;
         }
         if (canMoveLeft && this.dashSpeed < 0 && this.x <= this.maxRight) {
-          level.speed -= 8;
-          this.dashSpeed -= 8;
+          level.speed -= 800 * deltaSeconds;
+          this.dashSpeed += 300 * deltaSeconds;
         }
       } else if (this.dashSpeed === 0) {
         //this.idle();
@@ -377,10 +377,10 @@ class Player {
   }
 
   left() {
-    return this.x + 45;
+    return this.x + 50;
   }
   right() {
-    return this.x + this.width - 45;
+    return this.x + this.width - 50;
   }
   top() {
     return this.y + 10;
@@ -462,23 +462,23 @@ class Player {
     }
   }
 
-  die() {
+  die(deltaTime) {
     this.animating = true;
-    this.dieAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+    this.dieAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     this.animating = true;
   }
 
-  run() {
+  run(deltaTime) {
     if (this.shooting) {
-      this.runShootAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+      this.runShootAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     } else {
-      this.runAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+      this.runAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     }
 
     this.animating = true;
   }
 
-  jump() {
+  jump(deltaTime) {
     let jumpType = this.jumpAnimation;
 
     if (this.melee) {
@@ -494,23 +494,14 @@ class Player {
       this.animating = true; //doesn't reset the animation if is still jumping
       if (jumpType.currentFrame < jumpType.totalFrames) {
         this.animating = true;
-        //     this.jumping = false; //finish jumping
-        //     this.melee = false;
-        //     this.animating = false;
-        //}
-        // if(this.y >= 500 || this.onGround) {
-        //     //this.jumping = false;
-        //     //this.animating = false;
-        //  this.melee = false;
-        //  this.shooting = false;
       } else {
         this.animating = false;
       }
     }
-    jumpType.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+    jumpType.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
   }
 
-  dash() {
+  dash(deltaTime) {
     if (this.sliding && this.onGround) {
       //doesn't dash if in the air
       this.animating = true; //doesn't reset the animation if is still sliding
@@ -523,19 +514,19 @@ class Player {
       this.sliding = false;
     }
 
-    this.slideAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+    this.slideAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
   }
 
   turn() {
     this.lookingRight = !this.lookingRight;
   }
 
-  shoot() {
-    this.shootAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height, 2);
+  shoot(deltaTime) {
+    this.shootAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 2);
     this.animating = true;
   }
 
-  meleeAtk() {
+  meleeAtk(deltaTime) {
     if (this.melee) {
       this.animating = true; //doesn't reset the animation if is still attacking
       if (this.meleeAnimation.currentFrame === this.meleeAnimation.totalFrames) {
@@ -544,13 +535,13 @@ class Player {
       }
     }
     if (!this.jumping) {
-      this.meleeAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+      this.meleeAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     }
   }
 
-  idle() {
+  idle(deltaTime) {
     this.animating = true;
-    this.idleAnimation.animate(this.animating, this.lookingRight, this.x, this.y, this.width, this.height);
+    this.idleAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     this.animating = false;
   }
 
@@ -565,18 +556,26 @@ class Player {
     ctx.drawImage(image, x, y, w, h);
   }
 
-  updateSuperShot() {
+  updateSuperShot(deltaTime) {
+    this.superShotTimer += deltaTime;
+    
+    // TODO: improve this - faster superShot (rapid-s) is hardcoded and defined as 1000ms
+    const hasPowerUp = this.superShotCooldown === 1000;
+    const powerUpSpeedMultiplier = hasPowerUp ? 2 : 1;
+    let fillRatio = Math.min(this.superShotTimer / this.superShotCooldown * powerUpSpeedMultiplier, 1);
+
+
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 4;
     ctx.font = 'bold 20px sans-serif';
     ctx.fillStyle = 'gold';
 
-    if (this.superCounter === 100) {
-      ctx.fillRect(50, 100, this.superShotTimer * 2, 50);
+    if (hasPowerUp) {
+      ctx.fillRect(50, 100, 200 * fillRatio, 50); // fill it in half of the defaultTime (2000ms)
       ctx.fillStyle = 'green';
       ctx.fillText(`FASTER SHOT`, 80, 132);
     } else {
-      ctx.fillRect(50, 100, this.superShotTimer, 50);
+      ctx.fillRect(50, 100, 200 * fillRatio, 50);
       ctx.fillStyle = 'red';
       ctx.fillText(`SUPER SHOT`, 80, 132);
     }

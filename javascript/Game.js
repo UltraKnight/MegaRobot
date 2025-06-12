@@ -60,6 +60,13 @@ class Game {
     ctx.strokeText(`LIFE ${String(this.player.health)}`, 50, 50);
   }
 
+  showFPS(currFPS) {
+    ctx.font = 'bold 16px sans-serif';
+    ctx.fillstyle = 'gold';
+    ctx.lineWidth = 1;
+    ctx.fillText(`FPS: ${currFPS}`, canvas.width - 100, 50);
+  }
+
   gameOver() {
     backSound.stop();
     const btnPlay = document.getElementById('btn-play-again');
