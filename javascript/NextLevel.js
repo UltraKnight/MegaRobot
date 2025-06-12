@@ -1,7 +1,7 @@
 //just change the properties of the level :)
 const goToLevel = (currentLevel) => {
   currentGame.player.x = 100;
-  currentGame.player.y = 501;
+  currentGame.player.y = 500;
   currentGame.player.superShotCooldown = 2000; // reset it to defaulTime (without the power up)
 
   switch (currentLevel) {

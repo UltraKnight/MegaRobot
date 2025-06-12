@@ -3,7 +3,7 @@ class Player {
     this.godMode = false;
 
     this.x = 100;
-    this.y = 501;
+    this.y = 500;
     this.xVelocity = 0;
     this.yVelocity = 0;
     this.width = 160;
