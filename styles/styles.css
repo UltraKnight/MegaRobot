@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(69, 69, 69);
+  background-color: rgb(28, 28, 28);
   background-image: url('../images/background.png');
   background-repeat: no-repeat;
   background-size: cover;
@@ -26,6 +26,7 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
+  overflow: auto;
   background: linear-gradient(
     to bottom,
     transparent,

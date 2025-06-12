@@ -124,10 +124,44 @@
     </div>
 
     <script>
+      
       document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('btn-play').innerHTML = 'Loading...';
+        function isDesktop() {
+          const ua = navigator.userAgent;
+          const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+          return !isMobile;
+        }
+
+        function showInfo() {
+          document.querySelector('.top').style.visibility = 'hidden';
+          document.querySelector('.bottom').style.visibility = 'hidden';
+          document.querySelector('#main-menu').style.visibility = 'hidden';
+          const divEl = document.createElement('div');
+          const stylesToApply = {
+            textAlign: 'center',
+            color: 'white',
+            textShadow: 'black 0 0 4px',
+            position: 'absolute',
+            bottom: '200px',
+            left: '0',
+            right: '0'
+          }
+
+          for (const [k, v] of Object.entries(stylesToApply)) {
+            divEl.style[k] = v;
+          }
+
+          divEl.innerHTML = '<h2>Please, open this app in a desktop device with a physical keyboard! 😊</h2>';
+          document.body.appendChild(divEl);
+        }
+
+        if (!isDesktop()) {
+          showInfo();
+        }
       });
     </script>
+    <script></script>
     <script src="./javascript/Level.js"></script>
     <script src="./javascript/NextLevel.js"></script>
     <script src="./javascript/Player.js"></script>
