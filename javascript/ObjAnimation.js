@@ -1,5 +1,5 @@
 class ObjAnimation {
-  constructor(totalFrames, imageSrc, frameWidth = 567, frameHeight = 556, shiftX = 0, shiftY = 0) {
+  constructor(totalFrames, imageSrc, frameWidth = 567, frameHeight = 556, shiftX = 0, shiftY = 0, frameDuration = 100) {
     this.totalFrames = totalFrames;
     this.fw = frameWidth;
     this.fh = frameHeight;
@@ -8,49 +8,43 @@ class ObjAnimation {
     this.shiftX = shiftX;
     this.shiftY = shiftY;
     this.currentFrame = 1;
-    this.frameLimiterUpdate = 0;
     this.img = new Image();
     this.img.src = imageSrc;
+
+    this.cols = 3;
+    this.frameDuration = frameDuration; // ms per frame
+    this.elapsedTime = 0;
   }
 
-  animate(animating, lookingRight = false, x = 0, y = 0, width = this.w, height = this.h, cols = 3) {
-    if (animating === false) {
+  animate(animating, deltaTime, lookingRight = false, x = 0, y = 0, width = this.w, height = this.h, cols = this.cols) {
+    if (!animating) {
       this.reset();
     }
+    
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!lookingRight) {
       ctx.save();
       ctx.scale(-1, 1);
-      //draw the frame
       ctx.drawImage(this.img, this.shiftX, this.shiftY, this.fw, this.fh, x * -1 - width, y, width, height);
       ctx.restore();
     } else {
       ctx.drawImage(this.img, this.shiftX, this.shiftY, this.fw, this.fh, x, y, width, height);
     }
 
-    //to regulate the animation speed
-    this.frameLimiterUpdate++;
+    // Update frame based on elapsed time
+    this.elapsedTime += deltaTime;
+    if (this.elapsedTime >= this.frameDuration) {
+      this.elapsedTime = 0;
 
-    if (this.frameLimiterUpdate % 4 === 0) {
-      this.frameLimiterUpdate = 0;
-
-      //restart the animation
       if (this.currentFrame < this.totalFrames) {
-        //next col of the sprite sheet
         this.shiftX += this.fw + 1;
-
-        //next row of the sprite sheet
         if (this.currentFrame % cols === 0) {
-          //if it's the last column
-          this.shiftX = 0; //start from the begining of the next line
-          this.shiftY += this.fh + 1; //go to the next line - +1 means 1px distance of each image/frame
+          this.shiftX = 0;
+          this.shiftY += this.fh + 1;
         }
-
         this.currentFrame++;
       } else {
-        this.shiftX = 0;
-        this.shiftY = 0;
-        this.currentFrame = 1;
+        this.reset();
       }
     }
   }
@@ -59,6 +53,6 @@ class ObjAnimation {
     this.currentFrame = 1;
     this.shiftX = 0;
     this.shiftY = 0;
-    this.frameLimiterUpdate = 0;
+    this.elapsedTime = 0;
   }
 }

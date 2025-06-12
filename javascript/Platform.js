@@ -24,6 +24,7 @@ class Platform {
   draw() {
     let img = new Image();
     img.src = this.imgSrc;
+    // level.speed is already multiplied by deltaSeconds
     this.x = this.x - level.speed;
     ctx.drawImage(img, this.x - level.speed, this.y, this.width, this.height);
   }

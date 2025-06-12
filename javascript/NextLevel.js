@@ -1,9 +1,8 @@
 //just change the properties of the level :)
 const goToLevel = (currentLevel) => {
   currentGame.player.x = 100;
-  currentGame.player.y = 500;
-  currentGame.player.superCounter = 200;
-  currentGame.player.shootCounter = 18;
+  currentGame.player.y = 501;
+  currentGame.player.superShotCooldown = 2000; // reset it to defaulTime (without the power up)
 
   switch (currentLevel) {
     case 1:
@@ -63,7 +62,7 @@ const goToLevel = (currentLevel) => {
         './images/platforms/tile_middle.png',
       ];
 
-      level.spawnTimer = 180;
+      level.spawnCooldown = 200;
       break;
   }
 };

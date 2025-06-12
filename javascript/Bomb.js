@@ -28,20 +28,21 @@ class Bomb {
     return this.y + this.height - 5;
   }
 
-  draw() {
+  draw(deltaTime) {
     if (this.goUp === 10) {
       // === to play the sound just once
       boomSound.play();
     }
     if (this.goUp <= 10) {
-      this.exploding.animate(true, this.rightOrLeft, this.x, this.y, this.width, this.height, 3);
+      this.exploding.animate(true, deltaTime, this.rightOrLeft, this.x, this.y, this.width, this.height, 3);
     } else {
-      this.animation.animate(true, this.rightOrLeft, this.x, this.y, this.width, this.height, 1); //cols ??
+      this.animation.animate(true, deltaTime, this.rightOrLeft, this.x, this.y, this.width, this.height, 1); //cols ??
     }
   }
 
-  move() {
-    this.x += this.speed - level.speed;
+  move(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
+    this.x += (this.speed * deltaSeconds) - level.speed;
     // if(this.goUp > 60) {
     //     this.y -= 4;
     // } else if(this.goUp > 40) {
@@ -50,11 +51,11 @@ class Bomb {
     //     this.y += 3;
     // }
     if (this.goUp > 50) {
-      this.y -= 3;
+      this.y -= 300 * deltaSeconds;
     } else if (this.goUp > 40) {
-      this.y -= 2;
+      this.y -= 200 * deltaSeconds;
     } else {
-      this.y += 3.5;
+      this.y += 300.5 * deltaSeconds;
     }
 
     if (this.goUp > 0) {
@@ -80,12 +81,12 @@ class Bomb {
       if (currentGame.player.health < 0) {
         currentGame.hasEnded = true;
       }
-      return colliding; //if colliding the bullet will be removed in the player move()
+      return colliding; // if colliding the bullet will be removed in the player move()
     }
   }
 
-  updateBomb() {
-    this.move();
-    this.draw();
+  updateBomb(deltaTime) {
+    this.move(deltaTime);
+    this.draw(deltaTime);
   }
 }

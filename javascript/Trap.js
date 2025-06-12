@@ -7,8 +7,10 @@ class Trap {
     this.animation = new ObjAnimation(3, source, 356, 361);
     this.damageValue = 3;
     this.canDamage = true;
-    this.speed = 1;
-    this.changePosCounter = 0;
+    this.speed = 100;
+    this.maxY = y + this.speed;
+    this.minY = y - this.speed;
+    this.movingUp = false;
   }
 
   left() {
@@ -24,21 +26,24 @@ class Trap {
     return this.y + this.height - 10;
   }
 
-  draw() {
+  draw(deltaTime) {
+    const deltaSeconds = deltaTime / 1000;
     this.x = this.x - level.speed;
-    this.y += this.speed;
-
-    if (this.changePosCounter % 100 === 0) {
-      this.speed = this.speed * -1;
-      this.changePosCounter = 1;
-    }
-    this.changePosCounter++;
-
-    this.animation.animate(true, false, this.x, this.y, this.width, this.height, 3); //cols
+  // Switch direction if limits are reached
+  if (this.y >= this.maxY) {
+    this.movingUp = true;
+  } else if (this.y <= this.minY) {
+    this.movingUp = false;
   }
 
-  updateSaw() {
-    this.draw();
+  // Apply movement
+  if (this.movingUp) {
+    this.y -= this.speed * deltaSeconds;
+  } else {
+    this.y += this.speed * deltaSeconds;
+  }
+
+    this.animation.animate(true, deltaTime, false, this.x, this.y, this.width, this.height, 3); //cols
   }
 
   hitPlayer() {
