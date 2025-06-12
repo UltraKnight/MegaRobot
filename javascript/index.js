@@ -39,11 +39,9 @@ function loop(timestamp) {
   if (controller.pause) {
     // Update lastTime so when unpaused, deltaTime is accurate
     lastTime = timestamp;
-    requestAnimationFrame(loop);
+    request = requestAnimationFrame(loop);
     return;
   }
-
-  // lastTime = timestamp;
 
   level.updateLevel(deltaTime);
 
