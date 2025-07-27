@@ -115,7 +115,6 @@ class Player {
           }
 
           if (this.y >= level.groundY && !this.collidingLeft && !this.collidingRight) {
-
             this.collidingRight = false;
             this.collidingLeft = false;
 
@@ -141,7 +140,7 @@ class Player {
           }
         }
 
-        if ((this.collidingRight || this.collidingLeft) && (!this.collidingTop && !this.onPlatform)) {
+        if ((this.collidingRight || this.collidingLeft) && !this.collidingTop && !this.onPlatform) {
           if (this.sliding) {
             this.sliding = false;
             this.canSlide = false;
@@ -203,7 +202,7 @@ class Player {
 
     // when shooting
     if (this.shooting) {
-    if (this.shootTimer >= this.shootCooldown) {
+      if (this.shootTimer >= this.shootCooldown) {
         this.shootTimer = 0;
         this.superShotTimer = 0;
         this.updateSuperShot(deltaTime); // reset super shot when shooting
@@ -219,7 +218,7 @@ class Player {
       }
     } else {
       this.updateSuperShot(deltaTime);
-      shootSound.stop();  
+      shootSound.stop();
     }
 
     //updating and removing out of sight bullets
@@ -229,7 +228,7 @@ class Player {
         let goToNext = false;
         //if(this.bullets[i].hitEnemy(level.enemies[j])) { //return true if enemy is alive
         if (this.bullets[i]) {
-          if (this.bullets[i].x >= canvas.width || this.bullets[i].x < 0) {
+          if (this.bullets[i].x > canvas.width || this.bullets[i].x < 15) {
             this.bullets.splice(i, 1);
             break;
           }
@@ -257,7 +256,6 @@ class Player {
         }
       }
     }
-    
 
     //if is falling - the char is not on the ground (groundY)
     if (this.y < level.groundY && !this.onPlatform) {
@@ -266,6 +264,7 @@ class Player {
         this.idle();
       }
     } else {
+      if (this.y > 500) this.y = 500; // Clamp to ground level
       this.onGround = true;
     }
 
@@ -277,9 +276,10 @@ class Player {
       this.yVelocity += gravitySpeed;
     }
 
-    if (this.jumping && this.jumpHeight > 0) { // jumpHeight is set in the loop (index.js)
-      //this.y -= 16; 
-      const jumpForce = 450;  
+    if (this.jumping && this.jumpHeight > 0) {
+      // jumpHeight is set in the loop (index.js)
+      //this.y -= 16;
+      const jumpForce = 450;
       this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 136;
       // jumpHeight has no influence on the player
       // it is used to know when it reaches the max jump height
@@ -346,9 +346,8 @@ class Player {
         if (canMoveLeft && this.dashSpeed < 0 && this.x <= this.maxRight) {
           level.speed -= 800 * deltaSeconds;
           this.dashSpeed += 300 * deltaSeconds;
-
         }
-      // keep sliding if colliding top
+        // keep sliding if colliding top
       } else if (this.dashSpeed === 0 && !this.collidingTop) {
         //this.idle();
         this.sliding = false;
@@ -468,7 +467,15 @@ class Player {
 
   run(deltaTime) {
     if (this.shooting) {
-      this.runShootAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
+      this.runShootAnimation.animate(
+        this.animating,
+        deltaTime,
+        this.lookingRight,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
     } else {
       this.runAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
     }
@@ -520,7 +527,16 @@ class Player {
   }
 
   shoot(deltaTime) {
-    this.shootAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 2);
+    this.shootAnimation.animate(
+      this.animating,
+      deltaTime,
+      this.lookingRight,
+      this.x,
+      this.y,
+      this.width,
+      this.height,
+      2,
+    );
     this.animating = true;
   }
 
@@ -533,7 +549,15 @@ class Player {
       }
     }
     if (!this.jumping) {
-      this.meleeAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height);
+      this.meleeAnimation.animate(
+        this.animating,
+        deltaTime,
+        this.lookingRight,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+      );
     }
   }
 
@@ -556,11 +580,10 @@ class Player {
 
   updateSuperShot(deltaTime) {
     this.superShotTimer += deltaTime;
-    
+
     // TODO: improve this - faster superShot is hardcoded and defined as 1000ms
     const hasPowerUp = this.superShotCooldown === 1000;
     let fillRatio = Math.min(this.superShotTimer / this.superShotCooldown, 1);
-
 
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 4;
