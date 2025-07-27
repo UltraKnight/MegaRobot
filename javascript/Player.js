@@ -280,7 +280,7 @@ class Player {
       // jumpHeight is set in the loop (index.js)
       //this.y -= 16;
       const jumpForce = 450;
-      this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 136;
+      this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 48;
       // jumpHeight has no influence on the player
       // it is used to know when it reaches the max jump height
       this.jumpHeight -= (360 + gravitySpeed) * deltaSeconds;
