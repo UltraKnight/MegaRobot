@@ -6,50 +6,22 @@ let currentLevel = parseInt(sessionStorage.getItem('nextLevel')) || 1;
 let request;
 let terminalVelocity = 1100;
 let gravity = 900; // 670
-let gravitySpeed = 800;
+let gravitySpeed = 0;
 let levelLastSpeed = 0;
 let dyingTimer;
+
+let FPS = 0;
 let lastTime = performance.now();
 let fpsLastUpdate = lastTime;
 let frames = 0;
-let FPS = 0;
 
 currentGame.player = new Player();
 
-function loop(timestamp) {
-  let deltaTime = timestamp - lastTime;
-   if (deltaTime <= 0 || deltaTime > 1000) {
-    deltaTime = 0.016; // fallback to 60 FPS
-  }
-  
-  lastTime = timestamp;
-  frames++;
-
-  if (timestamp - fpsLastUpdate >= 1000) {
-    FPS = Math.floor(1000 / deltaTime);
-    fpsLastUpdate = timestamp;
-    frames = 0;
-  }
-
-  if (dyingTimer === undefined) {
-    dyingTimer = timestamp;
-  }
-
-
-  if (controller.pause) {
-    // Update lastTime so when unpaused, deltaTime is accurate
-    lastTime = timestamp;
-    request = requestAnimationFrame(loop);
-    return;
-  }
-
-  level.updateLevel(deltaTime);
-
+const handleController = (deltaTime) => {
   if (controller.k) {
     if (currentGame.player.onGround) {
       if (!(currentGame.player.jumping || currentGame.player.sliding)) {
         currentGame.player.jumping = true;
-        currentGame.player.jumpHeight = 360; //350
         jumpSound.play();
       }
     }
@@ -124,14 +96,11 @@ function loop(timestamp) {
       currentGame.player.xVelocity = -600;
     }
   }
+};
 
-  // if(currentGame.player.collisionCheck(obstacleTest)) {
-  //     currentGame.player.inCollision = true;
-  // }
-
+const updatePlayer = (deltaTime) => {
   currentGame.player.move(deltaTime);
   currentGame.showLife();
-  currentGame.showFPS(FPS);
   currentGame.player.updateSuperShot(deltaTime);
 
   if (currentGame.player.jumping) {
@@ -149,25 +118,9 @@ function loop(timestamp) {
   if (currentGame.player.animating === false && currentGame.player.collidingTop === false) {
     currentGame.player.idle(deltaTime);
   }
+};
 
-  level.drawFront(deltaTime);
-
-  if (currentGame.hasEnded) {
-    if (!rainSound.sound.paused) {
-      rainSound.sound.pause();
-    }
-    
-    cancelAnimationFrame(request);
-
-    if (currentGame.player.health < 0) {
-      request = requestAnimationFrame((timestamp) => { lastTime = timestamp; dying(timestamp); });
-      return;
-    } else {
-      currentGame.gameOver();
-      return; //avoid entering in gameOver() twice
-    }
-  }
-
+const removeDead = (timestamp) => {
   //remove dead enemies after 3 seconds every 3 seconds :s
   if (timestamp - dyingTimer >= 4000) {
     //remove the dead enemies after the dying animation is executed
@@ -179,25 +132,90 @@ function loop(timestamp) {
 
     dyingTimer = timestamp;
   }
+};
 
-  request = requestAnimationFrame(loop);
-}
+const dying = (timestamp) => {
+  let deltaTime = timestamp - lastTime;
+  if (deltaTime <= 0 || deltaTime > 1000) {
+    deltaTime = 0.016; // fallback to 60 FPS
+  }
 
-function dying(timestamp) {
-  const deltaTime = timestamp - lastTime;
   lastTime = timestamp;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   level.updateLevel(deltaTime);
   currentGame.player.die(deltaTime);
   diedSound.play();
+
   if (currentGame.player.dieAnimation.currentFrame === currentGame.player.dieAnimation.totalFrames) {
     cancelAnimationFrame(request);
-    this.animating = false;
     currentGame.gameOver();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return;
   }
+
   request = requestAnimationFrame(dying);
+};
+
+const checkEndGame = () => {
+  if (currentGame.hasEnded) {
+    if (!rainSound.sound.paused) {
+      rainSound.sound.pause();
+    }
+
+    cancelAnimationFrame(request);
+
+    if (currentGame.player.health < 0) {
+      request = requestAnimationFrame((timestamp) => {
+        lastTime = timestamp;
+        dying(timestamp);
+      });
+      return;
+    } else {
+      currentGame.gameOver();
+      return; //avoid entering in gameOver() twice
+    }
+  }
+};
+
+function loop(timestamp) {
+  let deltaTime = timestamp - lastTime;
+  if (deltaTime <= 0 || deltaTime > 1000) {
+    deltaTime = 0.016; // fallback to 60 FPS
+  }
+  frames++;
+
+  if (timestamp - fpsLastUpdate >= 1000) {
+    FPS = Math.floor(1000 / deltaTime);
+    fpsLastUpdate = timestamp;
+    frames = 0;
+  }
+
+  if (dyingTimer === undefined) {
+    dyingTimer = timestamp;
+  }
+
+  if (controller.pause) {
+    // Update lastTime so when unpaused, deltaTime is accurate
+    lastTime = timestamp;
+    request = requestAnimationFrame(loop);
+    return;
+  }
+
+  // Move lastTime forward in fixed increments to keep time consistent
+  lastTime = timestamp;
+
+  level.updateLevel(deltaTime);
+  handleController(deltaTime);
+  updatePlayer(deltaTime);
+  level.drawFront(deltaTime);
+
+  checkEndGame();
+
+  removeDead(timestamp);
+  currentGame.showFPS(FPS);
+
+  !currentGame.hasEnded && requestAnimationFrame(loop);
 }
 
 window.onload = () => {

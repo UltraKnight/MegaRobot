@@ -39,7 +39,8 @@ class Player {
     this.collidingRight = false;
     this.collidingBottom = false;
 
-    this.jumpHeight = 0;
+    this.jumpTimer = 0;
+    this.maxJumpTime = 0.3;
     this.dashSpeed = 0;
     this.maxRight = canvas.width / 2 - 200;
 
@@ -107,7 +108,6 @@ class Player {
       if (this.inCollision && this.inCollisionWithPlatform) {
         if (this.collidingTop) {
           if (this.jumping) {
-            this.jumpHeight = 0;
             this.jumping = false;
             this.melee = false;
             this.shooting = false;
@@ -276,19 +276,19 @@ class Player {
       this.yVelocity += gravitySpeed;
     }
 
-    if (this.jumping && this.jumpHeight > 0) {
-      // jumpHeight is set in the loop (index.js)
+    if (this.jumping && this.jumpTimer < this.maxJumpTime) {
       //this.y -= 16;
-      const jumpForce = 450;
-      this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 48;
-      // jumpHeight has no influence on the player
-      // it is used to know when it reaches the max jump height
-      this.jumpHeight -= (360 + gravitySpeed) * deltaSeconds;
+      const jumpForce = 420;
+      this.jumpTimer += deltaSeconds;
+      // this.yVelocity -= (jumpForce + gravitySpeed) * deltaSeconds * 40;
+      this.yVelocity -= jumpForce + gravitySpeed;
+
       this.onPlatform = false;
-    } else if (this.jumping && this.jumpHeight <= 0) {
+    } else if (this.jumping) {
       this.idle();
       this.jumping = false;
       this.melee = false;
+      this.jumpTimer = 0; // reset jump timer, so the player can jump again
       //this.animating = false;
     }
 
@@ -362,7 +362,7 @@ class Player {
     this.xVelocity = 0;
     this.yVelocity = 0;
 
-    if (this.y < level.groundY && this.onGround === true) {
+    if (this.y >= level.groundY && this.onGround === true) {
       gravitySpeed = 0;
     }
 

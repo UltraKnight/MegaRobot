@@ -12,7 +12,7 @@ class Boss {
     this.attack1Animation = new ObjAnimation(8, `./images/enemies/Robot0${enemyType}/attack1_478_411.png`, 478, 411);
     this.deathAnimation = new ObjAnimation(15, `./images/enemies/Robot0${enemyType}/death1_320_237.png`, 320, 237);
     this.attacking = false;
-    this.lookingRight = false; // enemies walk to left
+    this.lookingRight = false;
     this.currentAnimation = 'walking'; //used in animation changing - not implemented yet
     this.animations = ['walking', 'attack1']; //used to change animation when its time - not implemented yet
     this.isEnemy = true;
@@ -20,8 +20,8 @@ class Boss {
     this.speed = 200;
     this.hasDied = false; //used to his death cry
     this.bombDamage = enemyType > 1 ? 2 : 1;
-    
-    this.changeActionCooldown = 800; // ms
+
+    this.changeActionCooldown = 1200; // ms
     this.changeActionTimer = 0;
   }
 
@@ -46,7 +46,16 @@ class Boss {
 
   draw(deltaTime) {
     if (this.currentAnimation === 'walking') {
-      this.walkAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+      this.walkAnimation.animate(
+        this.animating,
+        deltaTime,
+        this.lookingRight,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+        4,
+      );
 
       this.animating = true; //will be false when the animation changes - not implemented
     } else if (this.currentAnimation === 'attack1') {
@@ -93,7 +102,16 @@ class Boss {
       if (this.deathAnimation.currentFrame === this.deathAnimation.totalFrames) {
         this.animating = false;
       } else {
-        this.deathAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+        this.deathAnimation.animate(
+          this.animating,
+          deltaTime,
+          this.lookingRight,
+          this.x,
+          this.y,
+          this.width,
+          this.height,
+          4,
+        );
         if (this.hasDied === false) {
           this.hasDied = true;
           //play sound here
@@ -115,7 +133,7 @@ class Boss {
     }
 
     if (this.currentAnimation === 'walking') {
-      this.x -= (this.speed * deltaSeconds) + level.speed;
+      this.x -= this.speed * deltaSeconds + level.speed;
     } else if (this.currentAnimation === 'attack1') {
       this.x -= level.speed;
     } else {

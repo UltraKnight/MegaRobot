@@ -44,6 +44,9 @@ class Game {
     if (backSound.sound.paused) {
       backSound.play();
     }
+    
+    // scroll to bottom to fully see the canvas
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     requestAnimationFrame(loop);
     if (currentLevel === 1) {
       this.message('Megarobot! Help us to eliminate the unbridled robots that are trying to invade our facilities!');
@@ -61,7 +64,7 @@ class Game {
 
   showFPS(currFPS) {
     ctx.font = 'bold 16px sans-serif';
-    ctx.fillstyle = 'gold';
+    ctx.fillStyle = 'gold';
     ctx.lineWidth = 1;
     ctx.fillText(`FPS: ${currFPS}`, canvas.width - 100, 50);
   }
