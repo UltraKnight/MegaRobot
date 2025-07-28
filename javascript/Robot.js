@@ -33,7 +33,7 @@ class Robot {
     this.animating = false; //start animation from the beginning if it is set to false
     this.bombDamage = enemyType > 1 ? 2 : 1; //bomb damage based on enemy type
 
-    this.changeActionCooldown = 1000; // ms
+    this.changeActionCooldown = 1500; // ms
     this.changeActionTimer = 0;
   }
 
@@ -58,7 +58,16 @@ class Robot {
 
   draw(deltaTime) {
     if (this.currentAnimation === 'walking') {
-      this.walkAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+      this.walkAnimation.animate(
+        this.animating,
+        deltaTime,
+        this.lookingRight,
+        this.x,
+        this.y,
+        this.width,
+        this.height,
+        4,
+      );
 
       this.animating = true; //will be false when the animation changes - not implemented
     } else if (this.currentAnimation === 'attack1') {
@@ -79,9 +88,9 @@ class Robot {
         this.animating = true;
 
         if (this.lookingRight) {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 900, true, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, 500, true, this.bombDamage));
         } else {
-          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -900, false, this.bombDamage));
+          level.bombs.push(new Bomb(this.x, this.y + this.height / 2, -500, false, this.bombDamage));
         }
 
         this.currentAnimation = 'walking';
@@ -92,7 +101,16 @@ class Robot {
       if (this.deathAnimation.currentFrame === this.deathAnimation.totalFrames) {
         this.animating = false;
       } else {
-        this.deathAnimation.animate(this.animating, deltaTime, this.lookingRight, this.x, this.y, this.width, this.height, 4);
+        this.deathAnimation.animate(
+          this.animating,
+          deltaTime,
+          this.lookingRight,
+          this.x,
+          this.y,
+          this.width,
+          this.height,
+          4,
+        );
         this.animating = true;
       }
     }
@@ -110,9 +128,9 @@ class Robot {
     }
 
     if (this.currentAnimation === 'walking') {
-      this.x += (this.speed * deltaSeconds) - level.speed;
+      this.x += this.speed * deltaSeconds - level.speed;
     } else if (this.currentAnimation === 'attack1') {
-      this.x -= level.speed
+      this.x -= level.speed;
     } else {
       this.x -= level.speed;
     }

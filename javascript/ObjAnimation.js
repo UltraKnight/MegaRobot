@@ -1,5 +1,5 @@
 class ObjAnimation {
-  constructor(totalFrames, imageSrc, frameWidth = 567, frameHeight = 556, shiftX = 0, shiftY = 0, frameDuration = 100) {
+  constructor(totalFrames, imageSrc, frameWidth = 567, frameHeight = 556, shiftX = 0, shiftY = 0, frameDuration = 125) {
     this.totalFrames = totalFrames;
     this.fw = frameWidth;
     this.fh = frameHeight;
@@ -20,7 +20,7 @@ class ObjAnimation {
     if (!animating) {
       this.reset();
     }
-    
+
     //ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!lookingRight) {
       ctx.save();
@@ -34,7 +34,7 @@ class ObjAnimation {
     // Update frame based on elapsed time
     this.elapsedTime += deltaTime;
     if (this.elapsedTime >= this.frameDuration) {
-      this.elapsedTime = 0;
+      this.elapsedTime -= this.frameDuration;
 
       if (this.currentFrame < this.totalFrames) {
         this.shiftX += this.fw + 1;

@@ -29,19 +29,19 @@ class Trap {
   draw(deltaTime) {
     const deltaSeconds = deltaTime / 1000;
     this.x = this.x - level.speed;
-  // Switch direction if limits are reached
-  if (this.y >= this.maxY) {
-    this.movingUp = true;
-  } else if (this.y <= this.minY) {
-    this.movingUp = false;
-  }
+    // Switch direction if limits are reached
+    if (this.y >= this.maxY) {
+      this.movingUp = true;
+    } else if (this.y <= this.minY) {
+      this.movingUp = false;
+    }
 
-  // Apply movement
-  if (this.movingUp) {
-    this.y -= this.speed * deltaSeconds;
-  } else {
-    this.y += this.speed * deltaSeconds;
-  }
+    // Apply movement
+    if (this.movingUp) {
+      this.y -= this.speed * deltaSeconds;
+    } else {
+      this.y += this.speed * deltaSeconds;
+    }
 
     this.animation.animate(true, deltaTime, false, this.x, this.y, this.width, this.height, 3); //cols
   }
